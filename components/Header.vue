@@ -1,6 +1,6 @@
 <template lang="pug">
 header.glonavi-header#mainHeader
-  nav.navbar.newHeader1(role="navigation" aria-label="main navigation")
+  nav.navbar.pb-2(role="navigation" aria-label="main navigation")
     .navbar-brand
       
       .navbar-item.navbar-burger(:class="{'is-active':bugerActive}" v-on:click="bugerClick")
@@ -8,12 +8,11 @@ header.glonavi-header#mainHeader
         span
         span
 
-      .navbar-item
-        NuxtLink(:to="'/'")
-          img.image.is-48x48(src="/favicon.ico")
-          
     .navbar-menu
       .navbar-start
+        .navbar-item
+          NuxtLink(:to="'/'")
+            img.image(src="/logo_yp.png")
         .navbar-item 
           input.input.is-rounded
         .navbar-item
@@ -31,8 +30,7 @@ header.glonavi-header#mainHeader
               i.fas.fa-lg.fa-regular.fa-bell
         .navbar-item
           button.button.is-primary.is-inverted.is-rounded
-            //- figure.image.is-48x48
-            img(src="/favicon.ico")
+            img(src="/channelImg.png")
               
           
 </template>
@@ -52,7 +50,7 @@ function closeBuger() {
 <style lang="scss" scoped>
 #mainHeader {
   height: 70px;
-  width: 100vw;
+  width: 100%;
   z-index: 99990;
 }
 </style>

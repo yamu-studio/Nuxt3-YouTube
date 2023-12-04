@@ -5,64 +5,12 @@
 
 //ーーーーーーーー 全体系 ーーーーーーーーーーーーーーーーーーーーー
 
-//ーー ページ移動時のcss
-// 右から入って左に抜けてくアニメーション
-// 全部のページ移動時に発動する
-.v-enter {
-  transform: translate(-100px, 0);
-  opacity: 0;
-}
-
-.v-enter-to {
-  opacity: 1;
-}
-
-.v-enter-active {
-  transition: all 1s 0s ease;
-}
-
-.v-leave {
-  transform: translate(0, 0);
-  opacity: 1;
-}
-
-.v-leave-to {
-  transform: translate(100px, 0);
-  opacity: 0;
-}
-
-.v-leave-active {
-  transition: all 0.5s 0s ease;
-}
 
 //ーーーーーーーー bulma調節はここへ ーーーーーーーーーーーーーーーーーーーーー
-// 以下は直接変更している
-// ・other.css
-//     .number:not(.token)
-// ・tag.css
-//     .tag:not(body):not(.token)
-
-// bulma調節
 // .content {
 //     white-space: pre-wrap;
 // }
 
-// .modal-card {
-//     // margin: 0px;
-//     width: 90%;
-// }
-
-//ーーーーーーーー prismはここへ ーーーーーーーーーーーーーーーーーーーーー
-
-// pre code {
-//     font-size: 8px;
-// }
-
-// code[class*='language-'],
-// pre[class*='language-'] {
-//     font-size: 8px;
-//     white-space: pre-wrap !important;
-// }
 
 
 //ーーーーーーーー 共通系のクラスはここへ ーーーーーーーーーーーーーーーーーーーーー

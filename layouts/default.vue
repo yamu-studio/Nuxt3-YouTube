@@ -4,7 +4,6 @@
   main.page-content
     slot 
   SideMenu.sidebar
-  
     
 </template>
 
@@ -25,7 +24,6 @@ html {
   left: 68px;
   max-width: 92vw;
   padding-top: 70px;
-  // min-height: 92vh;
 }
 .header {
   position: fixed;
@@ -41,8 +39,5 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-
-  // display: flex;
-  // justify-content: space-between;
 }
 </style>
