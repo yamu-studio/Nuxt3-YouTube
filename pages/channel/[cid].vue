@@ -1,44 +1,60 @@
 <template lang="pug">
-#homeView
-  .tabs.content-row-space-left.p-3.m-0.janruTab
-    button.button.is-small.mr-3(v-for="janru in janruList" :key="janru.cd" :class="[janru.cd == nowJanru ? 'is-black':'is-light']") {{ janru.title }}
+#channelView
+  .container.is-fullhd.p-1
+    figure.image
+      img.contentRounded#channelBackImg(:src="channelData.backImg" alt="Channel image")
     
-  ul.columns.is-multiline.p-4.pt-6
-    li.column.is-one-third(v-for="mv in TopMovieList")
-      MovieCard(:movie="mv")
+    .content-row-space-left-start.p-2.pt-5
+      figure.image.is-128x128
+        img(:src="channelData.thumbnail" alt="Channel image")
+      .has-text-left
+        p.title.m-0.p-2 {{ channelData.name }}
+        .content-row-space-left
+          p.subtitle.is-size-7.has-text-grey.m-0.p-1 @{{ channelData.accountID }}・チャンネル登録者数 {{ $common.millBillUnit(channelData.subscribers) }}人・{{ $common.millBillUnit(channelData.movies) }} 本の動画
+        
+        .content-row-space-left
+          button.button.is-white.m-1.p-0
+            span.has-text-grey.is-size-7 概要欄
+            span.icon.has-text-grey
+              i.fas.fa-angle-right
+        
+        button.button.is-black.is-rounded チャンネル登録
+    .tabs
+      ul
+        li.is-active
+          NuxtLink ホーム
+        li
+          NuxtLink 動画
+        li
+          NuxtLink ショート
+        li
+          NuxtLink ライブ
+        li
+          NuxtLink 再生リスト
+        li
+          NuxtLink コミュニティ
+    
+    ul.columns.is-multiline
+      li.column.is-one-third(v-for="mv in recoMovieList")
+        MovieCard(:movie="mv")
+
 
 </template>
 
 <script setup lang="ts">
-const janruList = [
-  { title: "すべて", cd: 0 },
-  { title: "ゲーム", cd: 1 },
-  { title: "ライブ", cd: 2 },
-  { title: "音楽", cd: 3 },
-  { title: "ミックス", cd: 4 },
-];
+const channelID = useRoute().params.cid as string;
 
-const nowJanru = ref(0);
+const channelData = ref({
+  channelID: 1,
+  accountID: "yamu-studio",
+  name: "チャンネル名１チャンネル名１チャンネル名１チャンネル名１チャンネル名１",
+  backImg: "/channelBack.png",
+  thumbnail: "/channelImg.png",
+  subscribers: 1224,
+  movies: 123,
+});
 
-// AIPから取得ならこんな感じ
-// const TopMovieList = ref([]);
-// const { data, error } = await useFetch(
-//   ここurl,
-//   {
-//     method: "GET",
-//     headers: {
-//       "content-type": "application/json",
-//     },
-//     body: {
-//       パラメーター
-//     },
-//   }
-// );
-// if (!error.value) {
-//   TopMovieList.value = data.value.~~
-// }
-
-const TopMovieList = [
+const recoMovieList = [
   {
     movieID: 1,
     title:
@@ -127,13 +143,14 @@ const TopMovieList = [
 </script>
 
 <style lang="scss" scoped>
-#homeView {
+#channelView {
   min-height: 88vw;
 }
-.janruTab {
-  position: fixed;
-  z-index: 10;
-  width: 100%;
-  background-color: white;
+#channelBackImg {
+  height: 120px;
+}
+.tabs li.is-active a {
+  border-bottom-color: hsl(0, 0%, 0%);
+  color: hsl(0, 0%, 0%);
 }
 </style>

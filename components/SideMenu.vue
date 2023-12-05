@@ -1,36 +1,62 @@
 <template lang="pug">
-aside.menu.is-narrow-mobile.is-fullheight#openedSideber(v-if="bugerActive")
-  ul.menu-list.border-bottom-light
-    li.pl-3.pr-3
-      NuxtLink.p-2
-        .content-row-space-left 
-          span.icon
-            i.fas.fa-lg.fa-solid.fa-house
-          p.subtitle ホーム
+.modalBack(v-if="bugerActive")
+  .modal-background(@click="bugerClick")
+  .modal-content#modalMainSideber
+    .content-row-space-left
+      .navbar-item.navbar-burger.p-2.m-0(:class="{'is-active':!bugerActive}" @click="bugerClick")
+        span
+        span
+        span
+      .navbar-item
+        NuxtLink(:to="'/'")
+          img.image(src="/logo_yp.png")
 
-    li.pl-3.pr-3
-      NuxtLink.p-2
-        .content-row-space-left 
-          span.icon
-            i.fas.fa-lg.fa-circle-play
-          p.subtitle ショート
+    ul.menu-list.border-bottom-light.m-3
+      li.pl-3.pr-3
+        NuxtLink.p-2
+          .content-row-space-left 
+            span.icon
+              i.fas.fa-lg.fa-regular.fa-house
+            p.subtitle.is-size-7.m-0.pl-5 ホーム
 
-    li.pl-3.pr-3
-      NuxtLink.p-2
-        .content-row-space-left 
-          span.icon
-            i.fas.fa-lg.fa-tv
-          p.subtitle 登録チャンネル
-      
-  ul.menu-list.border-bottom-light
-    li
-      NuxtLink.p-1
-        .content-row-space-left 
-          span.icon
-            i.fas.fa-lg.fa-tv
-          p.subtitle マイページ 
+      li.pl-3.pr-3
+        NuxtLink.p-2
+          .content-row-space-left 
+            span.icon
+              i.fas.fa-lg.fa-regular.fa-circle-play
+            p.subtitle.is-size-7.m-0.pl-5 ショート
 
-aside.is-fullheight.is-hidden-mobile#mainSideber(v-else)
+      li.pl-3.pr-3
+        NuxtLink.p-2
+          .content-row-space-left 
+            span.icon
+              i.fas.fa-lg.fa-tv
+            p.subtitle.is-size-7.m-0.pl-5 登録チャンネル
+        
+    ul.menu-list.border-bottom-light.m-3
+      li.pl-3.pr-3
+        NuxtLink.p-2
+          .content-row-space-left 
+            p.subtitle.is-size-7.m-0 マイページ 
+            span.icon
+              i.fas.fa-lg.fa-solid.fa-angle-right
+
+      li.pl-3.pr-3
+        NuxtLink.p-2
+          .content-row-space-left 
+            span.icon
+              i.fas.fa-lg.fa-regular.fa-address-card
+            p.subtitle.is-size-7.m-0.pl-4 登録チャンネル
+
+
+    p.title.is-size-7.pt-3 登録チャンネル
+    ul.m-3
+      li.pl-3.pr-3(v-for="ch in subscedChannelList" :key="ch.channelID")
+        NuxtLink
+          ChannelCard(:ch="ch")
+            
+
+aside.sidebar.is-fullheight.is-hidden-mobile#mainSideber
   ul.menu-list
     li.pt-5
       NuxtLink.p-1(:to="'#'" @click="changeActiveLink(0)")
@@ -60,22 +86,84 @@ aside.is-fullheight.is-hidden-mobile#mainSideber(v-else)
 </template>
 
 <script setup lang="ts">
-const bugerActive = ref(false);
+const props = defineProps<{
+  bugerActive: boolean;
+}>();
+interface Emits {
+  (e: "update:bugerActive", value: any): void;
+}
+const emit = defineEmits<Emits>();
+
+function bugerClick() {
+  emit("update:bugerActive", !props.bugerActive);
+}
+
 const activeNum = ref(0);
 
 function changeActiveLink(n: number) {
   activeNum.value = n;
 }
+
+const subscedChannelList = [
+  {
+    channelID: 1,
+    thumbnail: "/channelImg.png",
+    name: "チャンネル名１",
+  },
+  {
+    channelID: 2,
+    thumbnail: "/channelImg.png",
+    name: "チャンネル名２チャンネル名２",
+  },
+  {
+    channelID: 3,
+    thumbnail: "/channelImg.png",
+    name: "チャンネル名３チャンネル名３チャンネル名３",
+  },
+  {
+    channelID: 4,
+    thumbnail: "/channelImg.png",
+    name: "チャンネル名４",
+  },
+  {
+    channelID: 5,
+    thumbnail: "/channelImg.png",
+    name: "チャンネル名５チャンネル名５",
+  },
+  {
+    channelID: 6,
+    thumbnail: "/channelImg.png",
+    name: "チャンネル名６チャンネル名６",
+  },
+  {
+    channelID: 7,
+    thumbnail: "/channelImg.png",
+    name: "チャンネル名７チャンネル名７チャンネル名７",
+  },
+];
 </script>
 
 <style lang="scss" scoped>
 #openedSideber {
   min-width: 120px;
 }
+.sidebar {
+  position: fixed;
+  top: 70px;
+  order: 1;
+}
 #mainSideber {
   width: 68px;
   p {
     font-size: 10px;
   }
+}
+#modalMainSideber {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background-color: white;
+  width: 240px;
+  min-height: 100%;
 }
 </style>
