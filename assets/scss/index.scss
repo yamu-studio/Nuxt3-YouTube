@@ -19,21 +19,23 @@
 }
 
 .border-bottom {
-  /*コレ*/
   border-bottom: 3px solid #333;
   padding: 6px;
-  // background: #f2f2f2;
 }
 
 .border-bottom-light {
-  /*コレ*/
-  border-bottom: 2.2px solid #ababab;
+  border-bottom: 0.8px solid #ababab;
   padding: 6px;
-  // background: #f2f2f2;
 }
 
 .border-top-padding {
   padding-top: 12px;
+}
+
+.cutMaxLength {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .card-1-1 {
@@ -82,6 +84,22 @@
   border-radius: 4px;
 }
 
+.contentRounded {
+  border-radius: 12px;
+}
+
+.leftRounded {
+  border-radius: 40px 0 0 40px;
+}
+
+.rightRounded {
+  border-radius: 0 40px 40px 0;
+}
+
+.flex-leftover {
+  flex-grow: 1;
+}
+
 .content-row-space-center {
   display: flex;
   flex-direction: row;
@@ -100,6 +118,24 @@
   flex-wrap: nowrap;
 }
 
+.content-row-space-left-start {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-content: center;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+}
+
+.content-row-space-right {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
 .content-row-space-between {
   display: flex;
   flex-direction: row;
@@ -107,4 +143,13 @@
   flex-wrap: wrap;
   align-content: center;
   align-items: flex-start;
+}
+
+.content-row-space-between-center {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-content: center;
+  align-items: center;
 }
