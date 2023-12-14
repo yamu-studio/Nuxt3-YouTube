@@ -1,7 +1,7 @@
 <template lang="pug">
 #channelView
   .tile.is-ancestor.p-3
-    .tile.is-vertical.is-8.p-2
+    .tile.is-parent.is-vertical.is-8
       .is-child
         .content
           video.contentRounded(
@@ -56,7 +56,7 @@
 
       .is-child.has-text-left.p-3
         .content-row-space-left
-          p 382 件のコメント
+          p {{ sumCommentCount.toLocaleString() }} 件のコメント
           button.button.is-white 
             span.icon
               i.fa-solid.fa-arrow-down-wide-short
@@ -76,46 +76,20 @@
                 button.button.is-rounded(:class="[commentText != '' ? 'is-link' : 'is-light']") コメント
 
         //- コメント
-        .content-row-space-left-start.p-1 
-          figure.image.is-32x32
-            img.is-rounded(:src="movieData.channel.thumbnail")
-          .flex-leftover 
-            .content-row-space-left.p-2
-              p.title.is-size-7.cutMaxLength.m-0 @qwertyuio
-              p.subtitle.is-size-7.cutMaxLength.m-0 1日前 (編集済み)
-            p.subtitle.is-6.pl-2.m-0 あいうえおかきくけこ<br>
-              | あいうえおかきくけこ<br>
-              | あいうえおかきくけこ<br>
-              | あいうえおかきくけこ<br>
-              | あいうえおかきくけこ<br>
-              |あいうえおかきくけこ
-            
-            .content-row-space-left
-              button.button.is-white
-                span.icon
-                  i.fa-regular.fa-thumbs-up
-                span 321
-              button.button.is-white
-                span.icon
-                  i.fa-regular.fa-thumbs-down
-              button.button.is-white 返信
-
-          button.button.is-small.is-white 
-            span.icon
-              i.fas.fa-solid.fa-ellipsis-vertical
+        CommentCard(v-for="cm in commentList" :key="cm.commentID" :cm="cm")
 
     .tile.is-parent.is-vertical.p-2.pl-0
       .is-child.card
         .card-image
-          img#adCard(:src="movieData.thumbnail" alt="Thumbnail")
+          img#adCard(:src="adData.thumbnail" alt="Ad thumbnail")
         .content-row-space-between-center
           .content-row-space-left
             figure.image.is-32x32.m-3
-              img.is-rounded(:src="movieData.channel.thumbnail" alt="ad image")
+              img.is-rounded(:src="adData.sponsor.thumbnail" alt="Ad sponsor image")
             .has-text-left
-              p.subtitle.is-6 好評受付中！
+              p.subtitle.is-6 {{ adData.title }}
               p.title.is-size-7 スポンサー・
-                | www.example.com
+                | {{ adData.sponsor.link }}
           button.button.is-link.is-rounded.p-2.m-3 詳細を確認
 
       .is-child.pt-2
@@ -128,6 +102,20 @@
 const route = useRoute();
 definePageMeta({
   layout: "full-window",
+});
+
+const adData = ref({
+  adID: 2,
+  title: "好評受付中！",
+  link: "www.example.com/12345",
+  thumbnail: "/movies/thumbnail_2.png",
+  publishedAt: new Date("2023-01-01 9:15:01"),
+  sponsor: {
+    sponsorlID: 1,
+    name: "スポンサー１スポンサー１スポンサー１",
+    thumbnail: "/channelImg.png",
+    link: "www.example.com",
+  },
 });
 
 const movieID = route.query.v != undefined ? route.query.v : null;
@@ -238,6 +226,34 @@ const TopMovieList = [
   },
 ];
 
+const sumCommentCount = ref(312333);
+const commentList = ref([
+  {
+    commentID: 1,
+    comment:
+      "あいうえおかきくけこあいうえおかきくけこあいうえおかきくけこあいうえおかきくけこあいうえおかきくけこ",
+    goods: 32112,
+    publishedAt: new Date("2023-11-01 10:10:10"),
+    updatedAt: new Date("2023-11-01 10:10:10"),
+    channel: {
+      channelID: "qwertyuio",
+      name: "チャンネル名１チャンネル名１チャンネル名１チャンネル名１チャンネル名１",
+      thumbnail: "/channelImg.png",
+    },
+  },
+  {
+    commentID: 2,
+    comment: "おおおおおおおおおおおお",
+    goods: 3,
+    publishedAt: new Date("2023-11-01 10:10:10"),
+    updatedAt: new Date("2023-11-05 10:10:10"),
+    channel: {
+      channelID: "qwertyuio",
+      name: "チャンネル名１チャンネル名１チャンネル名１チャンネル名１チャンネル名１",
+      thumbnail: "/channelImg.png",
+    },
+  },
+]);
 const commentText = ref("");
 
 // 動画設定
