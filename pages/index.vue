@@ -10,6 +10,7 @@
 </template>
 
 <script setup lang="ts">
+const nowJanru = ref(0);
 const janruList = [
   { title: "すべて", cd: 0 },
   { title: "ゲーム", cd: 1 },
@@ -18,27 +19,7 @@ const janruList = [
   { title: "ミックス", cd: 4 },
 ];
 
-const nowJanru = ref(0);
-
-// AIPから取得ならこんな感じ
-// const TopMovieList = ref([]);
-// const { data, error } = await useFetch(
-//   ここurl,
-//   {
-//     method: "GET",
-//     headers: {
-//       "content-type": "application/json",
-//     },
-//     body: {
-//       パラメーター
-//     },
-//   }
-// );
-// if (!error.value) {
-//   TopMovieList.value = data.value.~~
-// }
-
-const TopMovieList = [
+const TopMovieList = ref([
   {
     movieID: 1,
     title:
@@ -46,6 +27,7 @@ const TopMovieList = [
     movie: "/movies/movie_1.mp4",
     thumbnail: "/movies/thumbnail_1.png",
     views: 33000,
+    time: 180,
     publishedAt: new Date("2023-11-01 12:15:01"),
     channel: {
       channelID: 1,
@@ -60,6 +42,7 @@ const TopMovieList = [
     movie: "/movies/movie_2.mp4",
     thumbnail: "/movies/thumbnail_2.png",
     views: 11289019,
+    time: 240,
     publishedAt: new Date("2023-01-01 9:15:01"),
     channel: {
       channelID: 2,
@@ -74,6 +57,7 @@ const TopMovieList = [
     movie: "/movies/movie_1.mp4",
     thumbnail: "/movies/thumbnail_3.png",
     views: 827365189,
+    time: 31,
     publishedAt: new Date("2023-11-30 11:15:01"),
     channel: {
       channelID: 3,
@@ -88,6 +72,7 @@ const TopMovieList = [
     movie: "/movies/movie_2.mp4",
     thumbnail: "/movies/thumbnail_4.png",
     views: 9810,
+    time: 3601,
     publishedAt: new Date("2000-01-01 10:15:01"),
     channel: {
       channelID: 4,
@@ -102,6 +87,7 @@ const TopMovieList = [
     movie: "/movies/movie_1.mp4",
     thumbnail: "/movies/thumbnail_5.png",
     views: 33000,
+    time: 91,
     publishedAt: new Date("2022-3-01 12:15:01"),
     channel: {
       channelID: 5,
@@ -116,6 +102,7 @@ const TopMovieList = [
     movie: "/movies/movie_2.mp4",
     thumbnail: "/movies/thumbnail_6.png",
     views: 11289019,
+    time: 440,
     publishedAt: new Date("2023-11-01 10:15:01"),
     channel: {
       channelID: 6,
@@ -123,7 +110,18 @@ const TopMovieList = [
       thumbnail: "/channelImg.png",
     },
   },
-];
+]);
+
+// AIPから取得ならこんな感じ
+const { data, error } = await useFetch(`http://127.0.0.1:8000/movies`, {
+  method: "GET",
+  headers: {
+    "content-type": "application/json",
+  },
+});
+if (!error.value) {
+  TopMovieList.value = data.value;
+}
 </script>
 
 <style lang="scss" scoped>

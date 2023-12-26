@@ -38,6 +38,10 @@
   text-overflow: ellipsis;
 }
 
+.emptyBox {
+  height: 16vh;
+}
+
 .card-1-1 {
   width: 80vw;
 }
@@ -81,6 +85,14 @@
   box-sizing: border-box;
   //9dp/Light
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.wideForm {
+  width: 90%;
+}
+
+.contentLiteRounded {
   border-radius: 4px;
 }
 

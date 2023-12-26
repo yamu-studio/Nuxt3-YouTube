@@ -12,8 +12,8 @@ header#mainHeader
       
     .content-row-space-left
       .navbar-item.control.has-icons-right
-        input.input#inputLeftRounded(placeholder="検索")
-        button.button#searchLightRounded
+        input.input#inputLeftRounded(placeholder="検索" v-model="searchWord")
+        button.button#searchLightRounded(@click="doSearch")
           span.icon
             i.fas.fa-lg.fa-solid.fa-magnifying-glass
       .navbar-item
@@ -23,9 +23,10 @@ header#mainHeader
 
     .content-row-space-left
       .navbar-item
-        button.button.is-rounded
-          span.icon
-            i.fas.fa-lg.fa-solid.fa-video
+        NuxtLink(:to="'/channel/studio/videos/upload'")
+          button.button.is-rounded
+            span.icon
+              i.fas.fa-lg.fa-solid.fa-video
       .navbar-item
         button.button.is-rounded
           span.icon
@@ -48,6 +49,11 @@ const emit = defineEmits<Emits>();
 function bugerClick() {
   emit("update:bugerActive", !props.bugerActive);
 }
+
+const searchWord = ref("");
+const doSearch = () => {
+  navigateTo(`/results?search_query=${searchWord.value}`);
+};
 </script>
 
 <style lang="scss" scoped>

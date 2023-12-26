@@ -3,6 +3,7 @@ NuxtLink(:to="`/watch?v=${movie.movieID}`")
   .card-image
     figure.image.is-16by9
       img(:src="movie.thumbnail" alt="Thumbnail")
+    p.is-size-7.movieTime.contentLiteRounded.px-1.py-0 {{ $common.movieTimeLong(movie.time) }}
 
 .media.pt-2
   
@@ -25,3 +26,14 @@ const props = defineProps<{
   movie: any;
 }>();
 </script>
+
+<style lang="scss" scoped>
+.movieTime {
+  position: absolute;
+  bottom: 2px;
+  right: 6px;
+
+  color: white;
+  background-color: rgba(31, 31, 31, 0.759);
+}
+</style>

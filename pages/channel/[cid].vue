@@ -1,8 +1,8 @@
 <template lang="pug">
 #channelView
   .container.is-fullhd.p-1
-    figure.image
-      img.contentRounded#channelBackImg(:src="channelData.backImg" alt="Channel image")
+    figure.image.contentRounded#channelBackImg
+      img(:src="channelData.backImg" alt="Channel image")
     
     .content-row-space-left-start.p-2.pt-5
       figure.image.is-128x128
@@ -13,28 +13,28 @@
           p.subtitle.is-size-7.has-text-grey.m-0.p-1 @{{ channelData.accountID }}・チャンネル登録者数 {{ $common.millBillUnit(channelData.subscribers) }}人・{{ $common.millBillUnit(channelData.movies) }} 本の動画
         
         .content-row-space-left
-          button.button.is-white.m-1.p-0
-            span.has-text-grey.is-size-7 概要欄
+          NuxtLink.is-white.m-1.pt-1.pb-1
+            span.has-text-grey.is-size-7 {{ $common.cutWordLengthStr(channelData.description,30) }}
             span.icon.has-text-grey
               i.fas.fa-angle-right
-        
+          
         button.button.is-black.is-rounded チャンネル登録
     .tabs
       ul
-        li.is-active
-          NuxtLink ホーム
-        li
-          NuxtLink 動画
-        li
-          NuxtLink ショート
-        li
-          NuxtLink ライブ
-        li
-          NuxtLink 再生リスト
-        li
-          NuxtLink コミュニティ
+        li(:class="{'is-active':tabNo == 0}")
+          NuxtLink(@click="moveTag(0)") ホーム
+        li(:class="{'is-active':tabNo == 1}")
+          NuxtLink(@click="moveTag(1)") 動画
+        li(:class="{'is-active':tabNo == 2}")
+          NuxtLink(@click="moveTag(2)") ショート
+        li(:class="{'is-active':tabNo == 3}")
+          NuxtLink(@click="moveTag(3)") ライブ
+        li(:class="{'is-active':tabNo == 4}")
+          NuxtLink(@click="moveTag(4)") 再生リスト
+        li(:class="{'is-active':tabNo == 5}")
+          NuxtLink(@click="moveTag(5)") コミュニティ
     
-    ul.columns.is-multiline
+    ul.columns.is-multiline(v-if="tabNo == 1")
       li.column.is-one-third(v-for="mv in recoMovieList")
         MovieCard(:movie="mv")
 
@@ -44,15 +44,51 @@
 <script setup lang="ts">
 const channelID = useRoute().params.cid as string;
 
+const tabNo = ref(1);
+function moveTag(i: number) {
+  tabNo.value = i;
+}
+
 const channelData = ref({
   channelID: 1,
   accountID: "yamu-studio",
   name: "チャンネル名１チャンネル名１チャンネル名１チャンネル名１チャンネル名１",
+  description: "概要欄",
   backImg: "/channelBack.png",
   thumbnail: "/channelImg.png",
   subscribers: 1224,
   movies: 123,
 });
+
+// AIPから取得ならこんな感じ
+const { data, error } = await useFetch(
+  `http://127.0.0.1:8000/channels/${channelID}`,
+  {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+    },
+  }
+);
+if (!error.value) {
+  setDataForApi(data.value);
+} else {
+  // エラーにする
+  throw createError({
+    statusCode: 404,
+    statusMessage: "チャンネルが見つかりませんでした。",
+  });
+}
+
+function setDataForApi(mapData: any) {
+  // 含まれているkeyを取得
+  const keys = Object.keys(mapData);
+  keys.forEach((key) => {
+    if (mapData[key] != undefined && channelData.value[key] != undefined) {
+      channelData.value[key] = mapData[key];
+    }
+  });
+}
 
 const recoMovieList = [
   {
@@ -147,7 +183,8 @@ const recoMovieList = [
   min-height: 88vw;
 }
 #channelBackImg {
-  height: 120px;
+  max-height: 100px;
+  overflow: hidden;
 }
 .tabs li.is-active a {
   border-bottom-color: hsl(0, 0%, 0%);

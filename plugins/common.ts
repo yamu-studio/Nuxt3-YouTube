@@ -24,6 +24,55 @@ export default defineNuxtPlugin(() => {
     }
   }
 
+  function movieTimeLong(sec: number) {
+    // やること
+    // 1時間未満：mm:ss
+    // 1時間以上：hh:mm:ss(hhは24以上もブッコム)
+
+    // 300 → 60 *5 → 05:00
+    // 3900 → 3600 * 1 + 60 * 5 → 01:05:00
+
+    let hh = Math.floor(sec / 3600);
+    let aaa = sec % 3600;
+    let mm = Math.floor(aaa / 60);
+    let ss = sec % 60;
+    if (0 < hh) {
+      return `${zeroPadding(hh, 2)}:${zeroPadding(mm, 2)}:${zeroPadding(
+        ss,
+        2
+      )}`;
+    } else {
+      return `${zeroPadding(mm, 2)}:${zeroPadding(ss, 2)}`;
+    }
+  }
+
+  /**
+   * 0埋めする
+   * @param num
+   * @param len
+   * @returns
+   */
+  function zeroPadding(num: number, len: number) {
+    return (Array(len).join("0") + num).slice(-len);
+  }
+
+  /**
+   * 表示用に文字を...にする
+   * @param {string} word
+   * @param {number} len
+   * @returns {string}
+   */
+  const cutWordLengthStr = function (word: string, len: number) {
+    // let values = [];
+    let returnValue = word;
+    // console.log(word.length);
+
+    if (len < word.length) {
+      returnValue = word.slice(0, len) + "...";
+    }
+    return returnValue;
+  };
+
   /**
    * ●日前や●年前をだす。
    * @param date
@@ -76,6 +125,8 @@ export default defineNuxtPlugin(() => {
     provide: {
       common: {
         millBillUnit,
+        movieTimeLong,
+        cutWordLengthStr,
         dateAgo,
       },
     },

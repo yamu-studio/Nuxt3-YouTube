@@ -251,6 +251,37 @@ const commentList = ref([
     },
   },
 ]);
+
+// AIPから取得ならこんな感じ
+const { data, error } = await useFetch(
+  `http://127.0.0.1:8000/movies/${movieID}`,
+  {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+    },
+  }
+);
+if (!error.value) {
+  setDataForApi(data.value, movieData.value);
+} else {
+  // エラーにする
+  throw createError({
+    statusCode: 404,
+    statusMessage: "チャンネルが見つかりませんでした。",
+  });
+}
+
+function setDataForApi(mapData: any, outData: any) {
+  // 含まれているkeyを取得
+  const keys = Object.keys(mapData);
+  keys.forEach((key) => {
+    if (mapData[key] != undefined && outData[key] != undefined) {
+      outData[key] = mapData[key];
+    }
+  });
+}
+
 const commentText = ref("");
 
 // 動画設定
