@@ -10,6 +10,10 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  middleware: "check-auth",
+});
+
 const nowJanru = ref(0);
 const janruList = [
   { title: "すべて", cd: 0 },
