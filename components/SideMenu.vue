@@ -3,7 +3,7 @@
   .modal-background(@click="bugerClick")
   .modal-content#modalMainSideber
     .content-row-space-left
-      .navbar-item.navbar-burger.p-2.m-0(:class="{'is-active':!bugerActive}" @click="bugerClick")
+      .navbar-item.navbar-burger.m-2(:class="{'is-active':!bugerActive}" @click="bugerClick")
         span
         span
         span
@@ -47,7 +47,6 @@
             span.icon
               i.fas.fa-lg.fa-regular.fa-address-card
             p.subtitle.is-size-7.m-0.pl-4 登録チャンネル
-
 
     p.title.is-size-7.pt-3 登録チャンネル
     ul.m-3

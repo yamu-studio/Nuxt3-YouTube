@@ -1,5 +1,4 @@
 <template lang="pug">
-//- CommentCard(コメントカード)
 .content-row-space-left-start.p-1 
   figure.image.is-32x32
     img.is-rounded(:src="cm.channel.thumbnail")

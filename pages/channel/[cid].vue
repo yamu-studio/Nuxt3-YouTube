@@ -2,11 +2,11 @@
 #channelView
   .container.is-fullhd.p-1
     figure.image.contentRounded#channelBackImg
-      img(:src="channelData.backImg" alt="Channel image")
+      img(:src="channelData.backImg")
     
     .content-row-space-left-start.p-2.pt-5
       figure.image.is-128x128
-        img(:src="channelData.thumbnail" alt="Channel image")
+        img(:src="channelData.thumbnail")
       .has-text-left
         p.title.m-0.p-2 {{ channelData.name }}
         .content-row-space-left
@@ -60,35 +60,25 @@ const channelData = ref({
   movies: 123,
 });
 
-// AIPから取得ならこんな感じ
-const { data, error } = await useFetch(
-  `http://127.0.0.1:8000/channels/${channelID}`,
-  {
-    method: "GET",
-    headers: {
-      "content-type": "application/json",
-    },
-  }
-);
-if (!error.value) {
-  setDataForApi(data.value);
-} else {
-  // エラーにする
-  throw createError({
-    statusCode: 404,
-    statusMessage: "チャンネルが見つかりませんでした。",
-  });
-}
-
-function setDataForApi(mapData: any) {
-  // 含まれているkeyを取得
-  const keys = Object.keys(mapData);
-  keys.forEach((key) => {
-    if (mapData[key] != undefined && channelData.value[key] != undefined) {
-      channelData.value[key] = mapData[key];
-    }
-  });
-}
+// // AIPから取得ならこんな感じ
+// const { data, error } = await useFetch(
+//   `http://127.0.0.1:8000/channels/${channelID}`,
+//   {
+//     method: "GET",
+//     headers: {
+//       "content-type": "application/json",
+//     },
+//   }
+// );
+// if (!error.value) {
+//   setDataForApi(data.value);
+// } else {
+//   // エラーにする
+//   throw createError({
+//     statusCode: 404,
+//     statusMessage: "チャンネルが見つかりませんでした。",
+//   });
+// }
 
 const recoMovieList = [
   {

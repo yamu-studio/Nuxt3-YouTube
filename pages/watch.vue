@@ -1,6 +1,6 @@
 <template lang="pug">
 #channelView
-  .tile.is-ancestor.p-3
+  .tile.is-ancestor.p-3(v-if="!isLoading")
     .tile.is-parent.is-vertical.is-8
       .is-child
         .content
@@ -24,7 +24,7 @@
         .content-row-space-between
           .content-row-space-left 
             figure.image.is-32x32.m-1
-              img.is-rounded(:src="movieData.channel.thumbnail" alt="Channel image")
+              img.is-rounded(:src="movieData.channel.thumbnail")
             .has-text-left
               p.title.is-size-7.cutMaxLength#movieChannelName {{ movieData.channel.name }}
               p.subtitle.is-size-7 チャンネル登録者数 {{ $common.millBillUnit(movieData.channel.subscribers) }}人
@@ -73,7 +73,7 @@
                   i.fa-solid.fa-regular.fa-face-laugh-beam
               .content-row-space-right 
                 button.button.is-rounded.is-white キャンセル
-                button.button.is-rounded(:class="[commentText != '' ? 'is-link' : 'is-light']") コメント
+                button.button.is-rounded(:class="[commentText != '' ? 'is-link' : 'is-light']" @click="sendComment") コメント
 
         //- コメント
         CommentCard(v-for="cm in commentList" :key="cm.commentID" :cm="cm")
@@ -81,11 +81,11 @@
     .tile.is-parent.is-vertical.p-2.pl-0
       .is-child.card
         .card-image
-          img#adCard(:src="adData.thumbnail" alt="Ad thumbnail")
+          img#adCard(:src="adData.thumbnail")
         .content-row-space-between-center
           .content-row-space-left
             figure.image.is-32x32.m-3
-              img.is-rounded(:src="adData.sponsor.thumbnail" alt="Ad sponsor image")
+              img.is-rounded(:src="adData.sponsor.thumbnail")
             .has-text-left
               p.subtitle.is-6 {{ adData.title }}
               p.title.is-size-7 スポンサー・
@@ -120,6 +120,7 @@ const adData = ref({
 
 const movieID = route.query.v != undefined ? route.query.v : null;
 const movieData = ref({
+  id: 2,
   movieID: 2,
   title:
     "タイトル２タイトル２タイトル２タイトル２タイトル２タイトル２タイトル２タイトル２",
@@ -252,8 +253,10 @@ const commentList = ref([
   },
 ]);
 
+const isLoading = ref(true);
+
 // AIPから取得ならこんな感じ
-const { data, error } = await useFetch(
+const { data: resMovData, error: resMovError } = await useFetch(
   `http://127.0.0.1:8000/movies/${movieID}`,
   {
     method: "GET",
@@ -262,16 +265,37 @@ const { data, error } = await useFetch(
     },
   }
 );
-if (!error.value) {
-  setDataForApi(data.value, movieData.value);
+if (!resMovError.value) {
+  setDataForApi(resMovData.value, movieData.value);
 } else {
-  // エラーにする
   throw createError({
     statusCode: 404,
     statusMessage: "チャンネルが見つかりませんでした。",
   });
 }
 
+const { data: resMovInsghtData, error: resMovInsghtError } = await useFetch(
+  `http://127.0.0.1:8000/movies/${movieData.value.id}/insight`,
+  {
+    method: "GET",
+  }
+);
+if (!resMovInsghtError.value) {
+  setDataForApi(resMovInsghtData.value, movieData.value);
+} else {
+  // スローしないがインサイト系は全て0に
+}
+
+// 動画のダウンロードはこれでいける
+// →動画用サーバーのURLでやればもっと楽
+onMounted(async () => {
+  const response = await fetch(`http://127.0.0.1:8000/movies/${movieID}/src`);
+  const blob = await response.blob();
+  movieData.value.movie = URL.createObjectURL(blob);
+  isLoading.value = false;
+});
+
+// 共通関数として使ってもいいが、pythonのキャメル・スネーク変換は考えておくべき...
 function setDataForApi(mapData: any, outData: any) {
   // 含まれているkeyを取得
   const keys = Object.keys(mapData);
@@ -279,14 +303,27 @@ function setDataForApi(mapData: any, outData: any) {
     if (mapData[key] != undefined && outData[key] != undefined) {
       outData[key] = mapData[key];
     }
+    if (key == "movie_id") {
+      outData["movieID"] = mapData[key];
+    } else if (key == "channel_id") {
+      outData["channel"]["channelID"] = mapData[key];
+    } else if (key == "created_at") {
+      outData["publishedAt"] = new Date(mapData[key]);
+    } else if (key == "view_count") {
+      outData["views"] == mapData[key];
+    } else if (key == "good_count") {
+      outData["goods"] = mapData[key];
+    }
   });
 }
 
 const commentText = ref("");
+function sendComment() {
+  console.log("ここでコメント送信処理します。");
+}
 
 // 動画設定
 function loadingMovie() {
-  console.debug("ロード開始");
   // 音量を制御
   var videoElem: any = document.getElementById("userVideo");
   videoElem.volume = 0.1;
@@ -294,10 +331,8 @@ function loadingMovie() {
 function onPlay() {
   var videoElem: any = document.getElementById("userVideo");
   videoElem.volume = 0.1;
-  console.debug("再生開始");
 }
 function onPlays() {
-  console.debug("再生開始します！");
   var videoElem: any = document.getElementById("userVideo");
   videoElem.volume = 0.1;
 }

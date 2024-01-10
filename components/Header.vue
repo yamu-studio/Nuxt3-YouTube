@@ -1,38 +1,39 @@
 <template lang="pug">
-//- .modalBack(v-if="audioModalActive")
-//-   .modal-background(@click="closeModal")
-//-   .modal-content.pt-6
-//- header#mainHeader
 .card.cardModal#audioModal(v-if="audioModalActive")
   .card-content.p-2
     .content
-      p 音声で検索
-      p 音声で検索するには、ブラウザの設定に移動し、マイクへのアクセスを許可してください
-      button.button aa
+      .content-row-space-between-center.pt-6
+        p.title 音声で検索
+        button.button.is-white.is-rounded(@click="closeModal")
+          span.icon
+            i.fas.fa-xmark
+      p.subtitle.is-6 音声で検索するには、ブラウザの設定に移動し、マイクへのアクセスを許可してください
+      button.button.is-light.is-rounded
+        span.icon
+          i.fas.fa-microphone
 
 .card.cardModal#uploadModal(v-if="uploadModalActive")
   .card-content.p-1
     .content
       ul.menu-list.m-0
-        ol.m-o
-          NuxtLink
+        ol.m-0
+          NuxtLink(:to="'/channel/studio/videos/upload'")
             .content-row-space-left 
               span.icon
                 i.far.fa-lg.fa-square-caret-up.fa-rotate-90
               p.subtitle.is-size-7.m-0.pl-5 動画をアップロード
-        ol.m-o
+        ol.m-0
           NuxtLink
             .content-row-space-left 
               span.icon
                 i.fas.fa-lg.fa-tower-broadcast
               p.subtitle.is-size-7.m-0.pl-5 ライブ配信を開始
-        ol.m-o
+        ol.m-0
           NuxtLink
             .content-row-space-left 
               span.icon
                 i.far.fa-lg.fa-pen-to-square
               p.subtitle.is-size-7.m-0.pl-5 投稿を作成
-
 
 .card.cardModal#alertModal(v-if="alertModalActive")
   .card-content.p-0
@@ -42,24 +43,122 @@
         button.button.is-white.is-rounded
           span.icon
             i.fas.fa-gear
-      //- .alertContent
-      .alertContent
-        AlertCard(v-for="al in alertList"  :alert="al")
+      .alertContent(v-if="alertList.length > 0")
+        AlertCard(v-for="al in alertList" :alert="al")
+
+      .alertContent.p-6(v-else)
+        span.icon#bellIcon
+          i.far.fa-bell
+        .textContent
+          p.subtitle.has-text-grey.is-6 通知をオンにしましょう
+          p.subtitle.has-text-grey.is-size-7 チャンネル登録すると、お気に入りのチャンネルの最新動画について通知を受け取ることができます。
 
 .card.cardModal#profileModal(v-if="profileModalActive")
-  .card-content
-    .media
+  .card-content.p-0.m-2
+    .media.border-bottom-light.p-2.mb-0
       .media-left
         figure.image.is-48x48
-          img(src="https://bulma.io/images/placeholders/96x96.png")
-      .media-content
-        p.title John Smith
-        p.subtitle johnsmith
+          img.is-rounded(src="https://bulma.io/images/placeholders/96x96.png")
+      .media-content.has-text-left
+        p.title.is-5 チャンネル名
+        p.subtitle.is-6.mb-2 @abcdeee
+        NuxtLink.is-size-7 チャンネルを表示
+    
+    .scrollView
+      .menu-list.border-bottom-light.mb-0
+        NuxtLink.pt-3
+          .content-row-space-left 
+            span.icon
+              i.fab.fa-lg.fa-google
+            p.subtitle.is-size-7.m-0.pl-3 Googleアカウント
+        NuxtLink.pt-3
+          .content-row-space-between
+            .content-row-space-left 
+              span.icon
+                i.far.fa-lg.fa-address-card
+              p.subtitle.is-size-7.m-0.pl-3 アカウントを切り替える
+            span.icon
+              i.fas.fa-lg.fa-angle-right
+        NuxtLink.pt-3
+          .content-row-space-left 
+            span.icon
+              i.fas.fa-lg.fa-arrow-right-from-bracket
+            p.subtitle.is-size-7.m-0.pl-3 ログアウト
 
-    .content
-      p 音声で検索
-      p 音声で検索するには、ブラウザの設定に移動し、マイクへのアクセスを許可してください
-      button.button aa
+      .menu-list.border-bottom-light.mb-0
+        NuxtLink.pt-3
+          .content-row-space-left 
+            span.icon
+              i.fas.fa-lg.fa-play
+            p.subtitle.is-size-7.m-0.pl-3 YouTube Studio
+        NuxtLink.pt-3
+          .content-row-space-left 
+            span.icon
+              i.fas.fa-lg.fa-dollar-sign
+            p.subtitle.is-size-7.m-0.pl-3 購入とメンバーシップ
+      
+      .menu-list.border-bottom-light.mb-0
+        NuxtLink.pt-3
+          .content-row-space-left 
+            span.icon
+              i.fas.fa-lg.fa-shield-halved
+            p.subtitle.is-size-7.m-0.pl-3 YouTube でのデータ
+        NuxtLink.pt-3
+          .content-row-space-between
+            .content-row-space-left 
+              span.icon
+                i.fas.fa-lg.fa-moon
+              p.subtitle.is-size-7.m-0.pl-3 デザイン: ライト
+            span.icon
+              i.fas.fa-lg.fa-angle-right
+        NuxtLink.pt-3
+          .content-row-space-between
+            .content-row-space-left 
+              span.icon
+                i.fas.fa-lg.fa-language
+              p.subtitle.is-size-7.m-0.pl-3 言語: 日本語
+            span.icon
+              i.fas.fa-lg.fa-angle-right
+        NuxtLink.pt-3
+          .content-row-space-between
+            .content-row-space-left 
+              span.icon
+                i.fas.fa-lg.fa-user-shield
+              p.subtitle.is-size-7.m-0.pl-3 制限付きモード: オフ
+            span.icon
+              i.fas.fa-lg.fa-angle-right
+        NuxtLink.pt-3
+          .content-row-space-between
+            .content-row-space-left 
+              span.icon
+                i.fas.fa-lg.fa-globe
+              p.subtitle.is-size-7.m-0.pl-3 場所: 日本
+            span.icon
+              i.fas.fa-lg.fa-angle-right
+        NuxtLink.pt-3
+          .content-row-space-left 
+            span.icon
+              i.far.fa-lg.fa-keyboard
+            p.subtitle.is-size-7.m-0.pl-3 キーボードショートカット
+
+      .menu-list.border-bottom-light.mb-0
+        NuxtLink.pt-3
+          .content-row-space-left 
+            span.icon
+              i.fas.fa-lg.fa-gear
+            p.subtitle.is-size-7.m-0.pl-3 設定
+
+      .menu-list.mb-0
+        NuxtLink.pt-3
+          .content-row-space-left 
+            span.icon
+              i.far.fa-lg.fa-circle-question
+            p.subtitle.is-size-7.m-0.pl-3 ヘルプ
+        NuxtLink.pt-3
+          .content-row-space-left 
+            span.icon
+              i.far.fa-lg.fa-comment-dots
+            p.subtitle.is-size-7.m-0.pl-3 フィードバックを送信
 
 header#mainHeader
   nav.navbar.content-row-space-between
@@ -85,14 +184,14 @@ header#mainHeader
 
     .content-row-space-left
       .navbar-item
-        //- NuxtLink(:to="'/channel/studio/videos/upload'")
         button.button.is-white.is-rounded(@click="visibleModal(1)")
           span.icon
             i.fas.fa-lg.fa-solid.fa-video
       .navbar-item
         button.button.is-white.is-rounded(@click="visibleModal(2)")
           span.icon
-            i.fas.fa-lg.fa-regular.fa-bell
+            i.fas.fa-lg.fa-bell(v-if="alertModalActive")
+            i.far.fa-lg.fa-bell(v-else)
       .navbar-item
         button.button.is-primary.is-inverted.is-rounded(@click="visibleModal(3)")
           img(src="/channelImg.png")

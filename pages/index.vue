@@ -1,7 +1,7 @@
 <template lang="pug">
 #homeView
   .tabs.content-row-space-left.p-3.m-0.janruTab
-    button.button.is-small.mr-3(v-for="janru in janruList" :key="janru.cd" :class="[janru.cd == nowJanru ? 'is-black':'is-light']") {{ janru.title }}
+    button.button.is-small.mr-3(v-for="janru in janruList" :key="janru.cd" :class="[janru.cd == nowJanru ? 'is-black':'is-light']" @click="filterMovie(janru.cd)") {{ janru.title }}
     
   ul.columns.is-multiline.p-4.pt-6
     li.column.is-one-third(v-for="mv in TopMovieList")
@@ -22,6 +22,22 @@ const janruList = [
   { title: "音楽", cd: 3 },
   { title: "ミックス", cd: 4 },
 ];
+
+async function filterMovie(cd: number) {
+  nowJanru.value = cd;
+  const { data, error } = await useFetch(
+    `http://127.0.0.1:8000/movies?janru_cd=${cd}`,
+    {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+      },
+    }
+  );
+  if (!error.value) {
+    TopMovieList.value = data.value;
+  }
+}
 
 const TopMovieList = ref([
   {

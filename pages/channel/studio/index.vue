@@ -1,7 +1,6 @@
 <template lang="pug">
+//- スタジオ系は仮作成
 #studioView
-  
-
 </template>
 
 <script setup lang="ts"></script>

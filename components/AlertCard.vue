@@ -6,7 +6,7 @@ NuxtLink
     .alertContent.has-text-left
       p.subtitle.is-size-7 {{ alert.content }}
       p.subtitle.is-7.has-text-grey.m-0 {{ $common.dateAgo(alert.createdAt) }}
-    figure.image#alertThumbnail
+    figure.image.mt-0#alertThumbnail
       img(:src="alert.movie.thumbnail")
     button.button.is-small.is-white#hiddenBtn
       span.icon
@@ -29,6 +29,7 @@ const props = defineProps<{
 }
 #alertThumbnail {
   width: 64px;
+  height: 0px;
 }
 #hiddenBtn {
   color: rgba(255, 255, 255, 0);
