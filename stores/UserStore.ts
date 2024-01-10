@@ -9,13 +9,13 @@ export const useUserStore = defineStore("UserStore", {
     _isDev: true,
   }),
   actions: {
-    setAuthUser(param) {
+    setAuthUser(param: any) {
       this._authUser = param;
     },
-    setWidth(param) {
+    setWidth(param: number) {
       this._windowWidth = param;
     },
-    setDev(param) {
+    setDev(param: boolean) {
       this._isDev = param;
     },
     async logout() {
