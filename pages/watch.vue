@@ -42,17 +42,40 @@
               span.icon
                 i.fa-lg.fas.fa-share
               span 共有
-
             button.button.is-rounded.m-1
               span.icon
                 i.fas.fa-lg.fa-solid.fa-ellipsis
 
-      .is-child.has-text-left.has-background-light.contentRounded.p-3
+      .is-child.has-text-left.has-background-light.contentRounded.p-3(v-if="isOpenDescription")
+        .content-row-space-left 
+            p.subtitle.is-size-7.m-0.pr-2 {{ $common.millBillUnit(movieData.views) }}回再生
+            p.subtitle.is-size-7.m-0.pr-2 {{ $common.dateAgo(movieData.publishedAt) }}
+            NuxtLink.is-size-7.m-0.pr-2(v-for="tag in movieData.hashTags" :to="`/hashtag/${tag}`") &#035;{{ tag }}
+        p.subtitle.is-size-7.pt-2.mb-0 {{ movieData.description }} 
+        .content-row-space-left 
+          figure.image.is-96x96.m-1
+            img.is-rounded(:src="movieData.channel.thumbnail")
+          .has-text-left
+            p.title.is-size-7 {{ movieData.channel.name }}
+            p.subtitle.is-size-7 チャンネル登録者数 {{ $common.millBillUnit(movieData.channel.subscribers) }}人
+        .content-row-space-between-center
+          button.button.is-outlined.is-rounded.harhWidth
+            span.icon
+              i.fa-lg.fas.fa-clapperboard
+            span 動画
+          button.button.is-outlined.is-rounded.harhWidth
+            span.icon
+              i.fa-lg.far.fa-user
+            span 概要
+        p.subtitle.is-size-7.mt-6(@click="changeOpenDescription") 一部を表示
+
+      .is-child.has-text-left.has-background-light.contentRounded.p-3(v-else @click="changeOpenDescription")
         .content-row-space-left 
           p.subtitle.is-size-7.m-0.pr-2 {{ $common.millBillUnit(movieData.views) }}回再生
           p.subtitle.is-size-7.m-0.pr-2 {{ $common.dateAgo(movieData.publishedAt) }}
-          p.subtitle.is-size-7.has-text-grey.m-0.pr-2 #ハッシュタグ #ハッシュタグ #ハッシュタグ
-        p.subtitle.is-size-7 概要欄
+          NuxtLink.subtitle.is-size-7.has-text-grey.m-0.pr-2(v-for="tag in movieData.hashTags" :to="`/hashtag/${tag}`") {{ tag }}
+        p.subtitle.is-size-7.pt-2.mb-0#movieDescription {{ movieData.description }} 
+        p.subtitle.is-size-7.pt-1 もっと見る
 
       .is-child.has-text-left.p-3
         .content-row-space-left
@@ -124,8 +147,11 @@ const movieData = ref({
   movieID: 2,
   title:
     "タイトル２タイトル２タイトル２タイトル２タイトル２タイトル２タイトル２タイトル２",
+  description:
+    "あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄",
   movie: "/movies/movie_2.mp4",
   thumbnail: "/movies/thumbnail_2.png",
+  hashTags: ["ハッシュタグ１", "ハッシュタグ２", "ハッシュタグ３"],
   views: 11289019,
   goods: 123456,
   publishedAt: new Date("2023-01-01 9:15:01"),
@@ -253,6 +279,11 @@ const commentList = ref([
   },
 ]);
 
+const isOpenDescription = ref(false);
+function changeOpenDescription() {
+  isOpenDescription.value = !isOpenDescription.value;
+}
+
 const isLoading = ref(true);
 
 // AIPから取得ならこんな感じ
@@ -352,6 +383,12 @@ function onPlays() {
 }
 #movieChannelName {
   max-width: 200px;
+}
+#movieDescription {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
 }
 
 .commentInput {
