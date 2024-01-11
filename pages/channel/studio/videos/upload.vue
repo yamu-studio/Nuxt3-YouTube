@@ -50,10 +50,13 @@ function closeModal() {
 
 const isLoading = ref(false);
 // 動画アップロード系
-async function inputMovie(event: any) {
+function inputMovie(event: any) {
   isLoading.value = true;
 
   let file = event.target.files[0];
+  uploadMovie(file);
+}
+async function uploadMovie(file: any) {
   const formdata = new FormData();
   formdata.append("file", file);
 
@@ -73,14 +76,15 @@ async function inputMovie(event: any) {
   });
   if (!error.value) {
     alert("アップロードが完了しました。");
+    isLoading.value = false;
   }
 
   isLoading.value = false;
 }
 function dropImage(event: any) {
   isLoading.value = true;
-  let images = event.dataTransfer.files;
-  isLoading.value = false;
+  let file = event.dataTransfer.files[0];
+  uploadMovie(file);
 }
 const isEnter = ref(false);
 function dragEnter(_index: number) {

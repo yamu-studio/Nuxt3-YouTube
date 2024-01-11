@@ -133,15 +133,15 @@ const TopMovieList = ref([
 ]);
 
 // AIPから取得ならこんな感じ
-const { data, error } = await useFetch(`http://127.0.0.1:8000/movies`, {
-  method: "GET",
-  headers: {
-    "content-type": "application/json",
-  },
-});
-if (!error.value) {
-  TopMovieList.value = data.value;
-}
+// const { data, error } = await useFetch(`http://127.0.0.1:8000/movies`, {
+//   method: "GET",
+//   headers: {
+//     "content-type": "application/json",
+//   },
+// });
+// if (!error.value) {
+//   TopMovieList.value = data.value;
+// }
 </script>
 
 <style lang="scss" scoped>
