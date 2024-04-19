@@ -122,6 +122,8 @@
 </template>
 
 <script setup lang="ts">
+const { getMovieById } = useMovies();
+
 const route = useRoute();
 definePageMeta({
   layout: "full-window",
@@ -142,7 +144,6 @@ const adData = ref({
 });
 
 const movieID = route.query.v != undefined ? route.query.v : null;
-// const movieData = ref(null)
 const movieData = ref({
   id: 2,
   movieID: 2,
@@ -286,70 +287,17 @@ function changeOpenDescription() {
 }
 
 const isLoading = ref(true);
-
-// AIPから取得ならこんな感じ
-const { data: resMovData, error: resMovError } = await useFetch(
-  `http://127.0.0.1:8000/movies/${movieID}`,
-  {
-    method: "GET",
-    headers: {
-      "content-type": "application/json",
-    },
-  }
-);
-if (!resMovError.value) {
-  console.log(movieData.value);
-
-  // setDataForApi(resMovData.value, movieData.value);
-} else {
-  throw createError({
-    statusCode: 404,
-    statusMessage: "チャンネルが見つかりませんでした。",
-  });
-}
-
-// const { data: resMovInsghtData, error: resMovInsghtError } = await useFetch(
-//   `http://127.0.0.1:8000/movies/${movieData.value.id}/insight`,
-//   {
-//     method: "GET",
-//   }
-// );
-// if (!resMovInsghtError.value) {
-//   // setDataForApi(resMovInsghtData.value, movieData.value);
-// } else {
-//   // スローしないがインサイト系は全て0に
-// }
+movieData.value = await getMovieById(movieID);
 
 // 動画のダウンロードはこれでいける
 // →動画用サーバーのURLでやればもっと楽
 onMounted(async () => {
-  const response = await fetch(`http://127.0.0.1:8000/movies/${movieID}/src`);
-  const blob = await response.blob();
-  movieData.value.movie = URL.createObjectURL(blob);
+  // 直接動画データがある場合はこんな感じ？
+  // const response = await fetch(`http://127.0.0.1:8000/movies/${movieID}/src`);
+  // const blob = await response.blob();
+  // movieData.value.movie = URL.createObjectURL(blob);
   isLoading.value = false;
 });
-
-// 共通関数として使ってもいいが、pythonのキャメル・スネーク変換は考えておくべき...
-// function setDataForApi(mapData: any, outData: any) {
-//   // 含まれているkeyを取得
-//   const keys = Object.keys(mapData);
-//   keys.forEach((key) => {
-//     if (mapData[key] != undefined && outData[key] != undefined) {
-//       outData[key] = mapData[key];
-//     }
-//     if (key == "movie_id") {
-//       outData["movieID"] = mapData[key];
-//     } else if (key == "channel_id") {
-//       outData["channel"]["channelID"] = mapData[key];
-//     } else if (key == "created_at") {
-//       outData["publishedAt"] = new Date(mapData[key]);
-//     } else if (key == "view_count") {
-//       outData["views"] == mapData[key];
-//     } else if (key == "good_count") {
-//       outData["goods"] = mapData[key];
-//     }
-//   });
-// }
 
 const commentText = ref("");
 function sendComment() {

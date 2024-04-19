@@ -183,17 +183,17 @@ header#mainHeader
             i.fas.fa-lg.fa-microphone
 
     .content-row-space-left
-      .navbar-item
+      .navbar-item.px-0
         button.button.is-white.is-rounded(@click="visibleModal(1,uploadModalActive)")
           span.icon
             i.fas.fa-lg.fa-video(v-if="uploadModalActive")
             i.fas.fa-lg.fa-video(v-else)
-      .navbar-item
+      .navbar-item.px-0
         button.button.is-white.is-rounded(@click="visibleModal(2,alertModalActive)")
           span.icon
             i.fas.fa-lg.fa-bell(v-if="alertModalActive")
             i.far.fa-lg.fa-bell(v-else)
-      .navbar-item
+      .navbar-item.px-0
         button.button.is-primary.is-inverted.is-rounded(@click="visibleModal(3,profileModalActive)")
           img(src="/channelImg.png")
 </template>
@@ -336,6 +336,7 @@ const doSearch = () => {
   right: 1vw;
 }
 #inputLeftRounded {
+  // width: 30vw;
   border-radius: 40px 0 0 40px;
 }
 #searchLightRounded {
