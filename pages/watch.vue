@@ -10,10 +10,10 @@
             v-if="movieData.movie != null && movieData.movie != ''"
             v-on:loadedmetadata="loadingMovie()"
             v-on:play="onPlay()"
+            v-on:pause="onPause()"
             v-on:ended="onEnded()"
             controlsList="nodownload"
             oncontextmenu="return false;"
-            muted
             playsinline)
             source(
               :src="movieData.movie"
@@ -79,7 +79,7 @@
 
       .is-child.has-text-left.p-3
         .content-row-space-left
-          p {{ sumCommentCount.toLocaleString() }} 件のコメント
+          p {{ movieData.comments.toLocaleString() }} 件のコメント
           button.button.is-white 
             span.icon
               i.fa-solid.fa-arrow-down-wide-short
@@ -122,13 +122,16 @@
 </template>
 
 <script setup lang="ts">
-const { getMovieById } = useMovies();
+const { getMovies, getMovieById } = useMovies();
+const { getComments } = useCommentes();
 
+const userStore = useUserStore();
 const route = useRoute();
 definePageMeta({
   layout: "full-window",
 });
 
+// デフォで置いておく(DBは作ってない)
 const adData = ref({
   adID: 2,
   title: "好評受付中！",
@@ -144,142 +147,10 @@ const adData = ref({
 });
 
 const movieID = route.query.v != undefined ? route.query.v : null;
-const movieData = ref({
-  id: 2,
-  movieID: 2,
-  title:
-    "タイトル２タイトル２タイトル２タイトル２タイトル２タイトル２タイトル２タイトル２",
-  description:
-    "あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄あいうえお概要欄",
-  movie: "/movies/movie_2.mp4",
-  thumbnail: "/movies/thumbnail_2.png",
-  hashTags: ["ハッシュタグ１", "ハッシュタグ２", "ハッシュタグ３"],
-  views: 11289019,
-  goods: 123456,
-  publishedAt: new Date("2023-01-01 9:15:01"),
-  channel: {
-    channelID: 1,
-    name: "チャンネル名１チャンネル名１チャンネル名１チャンネル名１チャンネル名１",
-    thumbnail: "/channelImg.png",
-    subscribers: 1000,
-  },
-});
-
-const TopMovieList = [
-  {
-    movieID: 1,
-    title:
-      "タイトル１タイトル１タイトル１タイトル１タイトル１タイトル１タイトル１タイトル１",
-    movie: "/movies/movie_1.mp4",
-    thumbnail: "/movies/thumbnail_1.png",
-    views: 33000,
-    publishedAt: new Date("2023-11-01 12:15:01"),
-    channel: {
-      channelID: 1,
-      name: "チャンネル名１チャンネル名１チャンネル名１チャンネル名１チャンネル名１",
-      thumbnail: "/channelImg.png",
-    },
-  },
-  {
-    movieID: 2,
-    title:
-      "タイトル２タイトル２タイトル２タイトル２タイトル２タイトル２タイトル２タイトル２",
-    movie: "/movies/movie_2.mp4",
-    thumbnail: "/movies/thumbnail_2.png",
-    views: 11289019,
-    publishedAt: new Date("2023-01-01 9:15:01"),
-    channel: {
-      channelID: 2,
-      name: "チャンネル名１チャンネル名１チャンネル名１チャンネル名１チャンネル名１",
-      thumbnail: "/channelImg.png",
-    },
-  },
-  {
-    movieID: 3,
-    title:
-      "タイトル３タイトル３タイトル３タイトル３タイトル３タイトル３タイトル３タイトル３",
-    movie: "/movies/movie_1.mp4",
-    thumbnail: "/movies/thumbnail_3.png",
-    views: 827365189,
-    publishedAt: new Date("2023-11-30 11:15:01"),
-    channel: {
-      channelID: 3,
-      name: "チャンネル名１チャンネル名１チャンネル名１チャンネル名１チャンネル名１",
-      thumbnail: "/channelImg.png",
-    },
-  },
-  {
-    movieID: 4,
-    title:
-      "タイトル４タイトル４タイトル４タイトル４タイトル４タイトル４タイトル４タイトル４",
-    movie: "/movies/movie_2.mp4",
-    thumbnail: "/movies/thumbnail_4.png",
-    views: 9810,
-    publishedAt: new Date("2000-01-01 10:15:01"),
-    channel: {
-      channelID: 4,
-      name: "チャンネル名１チャンネル名１チャンネル名１チャンネル名１チャンネル名１",
-      thumbnail: "/channelImg.png",
-    },
-  },
-  {
-    movieID: 5,
-    title:
-      "タイトル５タイトル５タイトル５タイトル５タイトル５タイトル５タイトル５タイトル５",
-    movie: "/movies/movie_1.mp4",
-    thumbnail: "/movies/thumbnail_5.png",
-    views: 33000,
-    publishedAt: new Date("2022-3-01 12:15:01"),
-    channel: {
-      channelID: 5,
-      name: "チャンネル名１チャンネル名１チャンネル名１チャンネル名１チャンネル名１",
-      thumbnail: "/channelImg.png",
-    },
-  },
-  {
-    movieID: 6,
-    title:
-      "タイトル６タイトル６タイトル６タイトル６タイトル６タイトル６タイトル６タイトル６",
-    movie: "/movies/movie_2.mp4",
-    thumbnail: "/movies/thumbnail_6.png",
-    views: 11289019,
-    publishedAt: new Date("2023-11-01 10:15:01"),
-    channel: {
-      channelID: 6,
-      name: "チャンネル名１チャンネル名１チャンネル名１チャンネル名１チャンネル名１",
-      thumbnail: "/channelImg.png",
-    },
-  },
-];
-
-const sumCommentCount = ref(312333);
-const commentList = ref([
-  {
-    commentID: 1,
-    comment:
-      "あいうえおかきくけこあいうえおかきくけこあいうえおかきくけこあいうえおかきくけこあいうえおかきくけこ",
-    goods: 32112,
-    publishedAt: new Date("2023-11-01 10:10:10"),
-    updatedAt: new Date("2023-11-01 10:10:10"),
-    channel: {
-      channelID: "qwertyuio",
-      name: "チャンネル名１チャンネル名１チャンネル名１チャンネル名１チャンネル名１",
-      thumbnail: "/channelImg.png",
-    },
-  },
-  {
-    commentID: 2,
-    comment: "おおおおおおおおおおおお",
-    goods: 3,
-    publishedAt: new Date("2023-11-01 10:10:10"),
-    updatedAt: new Date("2023-11-05 10:10:10"),
-    channel: {
-      channelID: "qwertyuio",
-      name: "チャンネル名１チャンネル名１チャンネル名１チャンネル名１チャンネル名１",
-      thumbnail: "/channelImg.png",
-    },
-  },
-]);
+const startSeconds =
+  route.query.s != undefined && isFinite(route.query.s)
+    ? Number(route.query.s)
+    : 0;
 
 const isOpenDescription = ref(false);
 function changeOpenDescription() {
@@ -287,7 +158,9 @@ function changeOpenDescription() {
 }
 
 const isLoading = ref(true);
-movieData.value = await getMovieById(movieID);
+const movieData = await getMovieById(movieID);
+const commentList = await getComments(1);
+const TopMovieList = await getMovies();
 
 // 動画のダウンロードはこれでいける
 // →動画用サーバーのURLでやればもっと楽
@@ -296,27 +169,78 @@ onMounted(async () => {
   // const response = await fetch(`http://127.0.0.1:8000/movies/${movieID}/src`);
   // const blob = await response.blob();
   // movieData.value.movie = URL.createObjectURL(blob);
+
   isLoading.value = false;
 });
 
 const commentText = ref("");
-function sendComment() {
-  console.log("ここでコメント送信処理します。");
+async function sendComment() {
+  // この処理もスマートにするならcomposableにまとめておけると良い
+  const { data, error } = await useFetch(`http://127.0.0.1:8000/comments/add`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: {
+      comment: commentText.value,
+      movie_id: movieData.id,
+      // channel_id: userStore.authUser,
+      channel_id: 1,
+    },
+  });
+  if (!error.value) {
+    commentText.value = "";
+    alert("コメントしました！");
+  }
+}
+
+async function addViewdeMovieHistory(
+  viewdeSeconds: number,
+  isFinish: boolean = false
+) {
+  // この処理もcomposableでまとめ書きできるし、動画視聴のみで支度買わないと考えるとここにおいてもいいかなと
+  // チャンネルは自分のチャンネル(認証後storeしたデータ)を入れること
+  const { data, error } = await useFetch(
+    `http://127.0.0.1:8000/movies/history/add`,
+    {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: {
+        view_second: viewdeSeconds,
+        movie_id: movieData.id,
+        // channel_id: userStore.authUser,
+        channel_id: 1,
+        is_watched: isFinish,
+      },
+    }
+  );
 }
 
 // 動画設定
 function loadingMovie() {
   // 音量を制御
-  var videoElem: any = document.getElementById("userVideo");
+  var videoElem: any = document.getElementById("movieBox");
   videoElem.volume = 0.1;
+  videoElem.currentTime = startSeconds;
 }
 function onPlay() {
-  var videoElem: any = document.getElementById("userVideo");
-  videoElem.volume = 0.1;
+  var videoElem: any = document.getElementById("movieBox");
+  // 動画履歴に追加
+  addViewdeMovieHistory(Math.floor(videoElem.currentTime));
 }
-function onPlays() {
-  var videoElem: any = document.getElementById("userVideo");
-  videoElem.volume = 0.1;
+function onPause() {
+  var videoElem: any = document.getElementById("movieBox");
+  // 動画履歴に追加
+  addViewdeMovieHistory(Math.floor(videoElem.currentTime));
+}
+function onEnded() {
+  console.log(3);
+
+  var videoElem: any = document.getElementById("movieBox");
+  // 動画履歴に追加
+  addViewdeMovieHistory(Math.floor(videoElem.currentTime), true);
 }
 </script>
 

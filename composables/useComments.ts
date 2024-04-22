@@ -1,8 +1,8 @@
-export const useMovies = () => {
-  const getMovies = (janruCD = -1) =>
+export const useCommentes = () => {
+  const getComments = (movieID: number) =>
     new Promise(async (resolve, reject) => {
       const { data, error } = await useFetch(
-        `http://127.0.0.1:8000/movies?janru_cd=${janruCD}`,
+        `http://127.0.0.1:8000/comments?movie_id=${movieID}`,
         {
           method: "GET",
           headers: {
@@ -20,31 +20,12 @@ export const useMovies = () => {
         reject(error.value);
       }
     });
-  const getMovieById = (id: any) =>
-    new Promise(async (resolve, reject) => {
-      const { data, error } = await useFetch(
-        `http://127.0.0.1:8000/movies/${id}`,
-        {
-          method: "GET",
-          headers: {
-            "content-type": "application/json",
-          },
-        }
-      );
-      if (!error.value) {
-        resolve(setDataForApi(data.value));
-      } else {
-        reject(error.value);
-      }
-    });
 
   return {
-    getMovies,
-    getMovieById,
+    getComments,
   };
 };
 
-// 共通関数として使ってもいいが、pythonのキャメル・スネーク変換は考えておくべき...
 function setDataForApi(mapData: any) {
   // 含まれているkeyを取得
   let outMap = mapData;
@@ -53,27 +34,15 @@ function setDataForApi(mapData: any) {
     if (mapData[key] != undefined && outMap[key] != undefined) {
       outMap[key] = mapData[key];
     }
-    if (key == "id") {
-      outMap["id"] = mapData[key];
-    } else if (key == "movie_id") {
-      outMap["movieID"] = mapData[key];
-    } else if (key == "time_longth") {
-      outMap["time"] = mapData[key];
-    } else if (key == "created_at") {
+    if (key == "created_at") {
       outMap["publishedAt"] = new Date(mapData[key]);
     }
 
     if (key == "info") {
       const infoKeys = Object.keys(mapData[key]);
       infoKeys.forEach((subKey) => {
-        if (subKey == "title") {
-          outMap["title"] = mapData[key][subKey];
-        } else if (subKey == "description") {
-          outMap["description"] = mapData[key][subKey];
-        } else if (subKey == "movie_path") {
-          outMap["movie"] = mapData[key][subKey];
-        } else if (subKey == "thumbnail_path") {
-          outMap["thumbnail"] = mapData[key][subKey];
+        if (subKey == "comment") {
+          outMap["comment"] = mapData[key][subKey];
         }
       });
     }
@@ -84,8 +53,6 @@ function setDataForApi(mapData: any) {
           outMap["views"] = mapData[key][subKey];
         } else if (subKey == "good_count") {
           outMap["goods"] = mapData[key][subKey];
-        } else if (subKey == "comment_count") {
-          outMap["comments"] = mapData[key][subKey];
         }
       });
     }
