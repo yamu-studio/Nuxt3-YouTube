@@ -1,75 +1,24 @@
-# Nuxt 3 Minimal Starter
+# YouTube Clone built using Nuxt3 x FastAPI, MySQL.
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+### 今回使用した言語・フレームワーク等
 
-## Setup
+<img src="https://skillicons.dev/icons?i=nuxt,js,typescript,pug,vue,python,fastapi,mysql,github,vscode,docker" />
 
-Make sure to install the dependencies:
+## 使用したパッケージ
 
-```bash
-# npm
-npm install
++ pug : テンプレートエンジン
++ bulma : CSSフレームワーク
++ pinia : 状態管理
++ fortawesome : 無料で使えるアイコンフォント集
 
-# pnpm
-pnpm install
+## UIはこんな感じです
 
-# yarn
-yarn install
+![image](https://github.com/yamu-studio/Nuxt3-YouTube/assets/95989535/f58f0845-5914-4e30-89f9-257abe8ca57c)
+![image](https://github.com/yamu-studio/Nuxt3-YouTube/assets/95989535/fc35173d-de94-450e-9249-9ca96457096d)
+![image](https://github.com/yamu-studio/Nuxt3-YouTube/assets/95989535/55a31687-b9ce-4542-bcbb-7b5b8212b223)
 
-# bun
-bun install
-```
+## APIは[このリポジトリ](https://github.com/yamu-studio/Python_FastAPI)を使っています
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
++ FastAPI : RESTful API用のフレームワーク
++ MySQL : データベース
++ Docker : 仮想環境用のプラットフォーム
