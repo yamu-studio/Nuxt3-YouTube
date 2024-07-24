@@ -1,16 +1,39 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  css: ["assets/scss/index.scss", "@fortawesome/fontawesome-free/css/all.css"],
   modules: [
     [
-      "@pinia/nuxt",
+      '@pinia/nuxt',
       {
-        autoImports: ["defineStore", "acceptHMRUpdate"],
+        autoImports: ['defineStore', 'acceptHMRUpdate'],
       },
     ],
+    // '@nuxt/test-utils/module',
+    // '@nuxtjs/sitemap',
+    '@nuxt/eslint',
   ],
+  // piniaPersistedstate: {
+  //   debug: true,
+  // },
   imports: {
-    dirs: ["stores"],
+    dirs: ['stores'],
   },
-});
+  // eslint: {
+  //   config: {
+  //     stylistic: false,
+  //   },
+  // },
+  css: [
+    'assets/scss/index.scss',
+    '@fortawesome/fontawesome-free/css/all.css',
+    // 'bulma/css/bulma.css',
+    'bulma/css/versions/bulma-no-dark-mode.css',
+    // 'easymde/dist/easymde.min.css',
+  ],
+  runtimeConfig: {
+    public: {
+      NUXT_APP_MODE: process.env.NUXT_APP_MODE || '',
+    },
+  },
+})
