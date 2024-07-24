@@ -1,18 +1,12 @@
 <template lang="pug">
 header.head-content
-  AtomsHeader(v-model:buger-active="bugerActive")
-//- side
+  AtomsHeader(:buger-active="bugerActive")
 .page-content
-  aside.sidebar(v-if="!UserStore.isMobile")
-    AtomsSideMenu(v-model:buger-active="bugerActive")
-  main.main-content
+  main
     slot 
-  
-
 </template>
 
 <script setup lang="ts">
-const UserStore = useUserStore();
 const bugerActive = ref(false);
 </script>
 
@@ -48,19 +42,6 @@ html {
   padding-top: 70px;
   width: 100vw;
   min-height: 82vh;
-}
-.sidebar {
-  position: fixed;
-  width: 68px;
-  z-index: 20;
-}
-.main-content {
-  position: relative;
-
-  @media screen and (min-width: 768px) {
-    left: 68px;
-    width: 95%;
-  }
 }
 // ページ移動時のcss
 // 右から入って左に抜けてくアニメーション

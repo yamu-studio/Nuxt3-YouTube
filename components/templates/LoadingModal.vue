@@ -25,6 +25,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 <style lang="scss" scoped>
 .modal {
-  z-index: 100;
+  z-index: 10;
 }
 </style>

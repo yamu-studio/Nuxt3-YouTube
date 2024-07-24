@@ -17,7 +17,7 @@ export default defineNuxtConfig({
   //   debug: true,
   // },
   imports: {
-    dirs: ['stores'],
+    dirs: ['stores', 'types'],
   },
   // eslint: {
   //   config: {

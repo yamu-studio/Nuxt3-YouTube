@@ -42,6 +42,6 @@ function doOk() {
 
 <style lang="scss" scoped>
 .modal {
-  z-index: 110;
+  z-index: 10;
 }
 </style>
