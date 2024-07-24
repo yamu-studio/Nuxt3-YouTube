@@ -3,7 +3,7 @@ NuxtLink(:to="`/watch?v=${movie.movieID}`")
   .card-image
     figure.image.is-16by9
       img(:src="movie.thumbnail" alt="Thumbnail")
-    p.is-size-7.movieTime.contentLiteRounded.px-1.py-0 {{ $common.movieTimeLong(movie.time) }}
+    p.is-size-7.movieTime.contentLiteRounded.px-1.py-0 {{ commonMovieTimeLong(movie.time) }}
 
 .media.pt-2
   
@@ -17,7 +17,7 @@ NuxtLink(:to="`/watch?v=${movie.movieID}`")
       p.subtitle.is-6.m-0.mb-2 {{ movie.title  }}
     NuxtLink(:to="`/channel/${movie.channel.channelID}`")
       p.subtitle.is-7.has-text-grey.m-0 {{ movie.channel.name }}
-    p.subtitle.is-7.has-text-grey.m-0 {{ $common.millBillUnit(movie.views) }} 回視聴・{{ $common.dateAgo(movie.publishedAt) }}
+    p.subtitle.is-7.has-text-grey.m-0 {{ commonMillBillUnit(movie.views) }} 回視聴・{{ commonDateAgo(movie.publishedAt) }}
 
 </template>
 

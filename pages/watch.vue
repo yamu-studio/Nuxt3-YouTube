@@ -1,10 +1,11 @@
 <template lang="pug">
-#channelView
-  .tile.is-ancestor.p-3(v-if="!isLoading")
-    .tile.is-parent.is-vertical.is-8
-      .is-child
+TemplatesLoadingModal(v-if="isLoading")
+.container.my-3(v-else)
+  .columns(v-if="movieData")
+    .column.is-8
+      .div
         .content
-          video.contentRounded(
+          video.rounded-content(
             id="movieBox"
             controls
             v-if="movieData.movie != null && movieData.movie != ''"
@@ -19,37 +20,37 @@
               :src="movieData.movie"
               type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"')
 
-      .is-child.has-text-left.p-3
+      .has-text-left.p-3
         p.title.is-5 {{ movieData.title }}
         .content-row-space-between
           .content-row-space-left 
             figure.image.is-32x32.m-1
               img.is-rounded(:src="movieData.channel.thumbnail")
             .has-text-left
-              p.title.is-size-7.cutMaxLength#movieChannelName {{ movieData.channel.name }}
-              p.subtitle.is-size-7 チャンネル登録者数 {{ $common.millBillUnit(movieData.channel.subscribers) }}人
+              p.title.is-size-7.cut-max-length#movieChannelName {{ movieData.channel.name }}
+              p.subtitle.is-size-7 チャンネル登録者数 {{ commonMillBillUnit(movieData.channel.subscribers) }}人
             button.button.is-black.is-rounded.p-2 チャンネル登録
 
           .content-row-space-right 
-            button.button.leftRounded
+            button.button.is-light.is-rounded
               span.icon
                 i.fa-lg.fa-regular.fa-thumbs-up
-              span {{ $common.millBillUnit(movieData.goods) }}
-            button.button.rightRounded
+              span {{ commonMillBillUnit(movieData.goods) }}
+            button.button.is-light.is-rounded
               span.icon
                 i.fa-lg.fa-regular.fa-thumbs-down
-            button.button.is-rounded.m-1
+            button.button.is-light.is-rounded.m-1
               span.icon
                 i.fa-lg.fas.fa-share
               span 共有
-            button.button.is-rounded.m-1
+            button.button.is-light.is-rounded.m-1
               span.icon
                 i.fas.fa-lg.fa-solid.fa-ellipsis
 
-      .is-child.has-text-left.has-background-light.contentRounded.p-3(v-if="isOpenDescription")
+      .div.has-text-left.has-background-light.rounded-content.p-3(v-if="isOpenDescription")
         .content-row-space-left 
-            p.subtitle.is-size-7.m-0.pr-2 {{ $common.millBillUnit(movieData.views) }}回再生
-            p.subtitle.is-size-7.m-0.pr-2 {{ $common.dateAgo(movieData.publishedAt) }}
+            p.subtitle.is-size-7.m-0.pr-2 {{ commonMillBillUnit(movieData.views) }}回再生
+            p.subtitle.is-size-7.m-0.pr-2 {{ commonDateAgo(movieData.publishedAt) }}
             NuxtLink.is-size-7.m-0.pr-2(v-for="tag in movieData.hashTags" :to="`/hashtag/${tag}`") &#035;{{ tag }}
         p.subtitle.is-size-7.pt-2.mb-0 {{ movieData.description }} 
         .content-row-space-left 
@@ -57,27 +58,27 @@
             img.is-rounded(:src="movieData.channel.thumbnail")
           .has-text-left
             p.title.is-size-7 {{ movieData.channel.name }}
-            p.subtitle.is-size-7 チャンネル登録者数 {{ $common.millBillUnit(movieData.channel.subscribers) }}人
+            p.subtitle.is-size-7 チャンネル登録者数 {{ commonMillBillUnit(movieData.channel.subscribers) }}人
         .content-row-space-between-center
-          button.button.is-outlined.is-rounded.harhWidth
+          button.button.is-black.is-outlined.is-rounded.mr-2
             span.icon
               i.fa-lg.fas.fa-clapperboard
             span 動画
-          button.button.is-outlined.is-rounded.harhWidth
+          button.button.is-black.is-outlined.is-rounded
             span.icon
               i.fa-lg.far.fa-user
             span 概要
         p.subtitle.is-size-7.mt-6(@click="changeOpenDescription") 一部を表示
 
-      .is-child.has-text-left.has-background-light.contentRounded.p-3(v-else @click="changeOpenDescription")
+      .div.has-text-left.has-background-light.is-rounded.p-3(v-else @click="changeOpenDescription")
         .content-row-space-left 
-          p.subtitle.is-size-7.m-0.pr-2 {{ $common.millBillUnit(movieData.views) }}回再生
-          p.subtitle.is-size-7.m-0.pr-2 {{ $common.dateAgo(movieData.publishedAt) }}
+          p.subtitle.is-size-7.m-0.pr-2 {{ commonMillBillUnit(movieData.views) }}回再生
+          p.subtitle.is-size-7.m-0.pr-2 {{ commonDateAgo(movieData.publishedAt) }}
           NuxtLink.subtitle.is-size-7.has-text-grey.m-0.pr-2(v-for="tag in movieData.hashTags" :to="`/hashtag/${tag}`") {{ tag }}
         p.subtitle.is-size-7.pt-2.mb-0#movieDescription {{ movieData.description }} 
         p.subtitle.is-size-7.pt-1 もっと見る
 
-      .is-child.has-text-left.p-3
+      .div.has-text-left.p-3
         .content-row-space-left
           p {{ movieData.comments.toLocaleString() }} 件のコメント
           button.button.is-white 
@@ -88,24 +89,27 @@
         .content-row-space-left
           figure.image.is-32x32
             img.is-rounded(:src="movieData.channel.thumbnail")
-          .flex-leftover 
+          .is-flex-grow
             input.commentInput(v-model="commentText" placeholder="コメントする...")
             .content-row-space-between 
               button.button.is-white 
                 span.icon
                   i.fa-solid.fa-regular.fa-face-laugh-beam
               .content-row-space-right 
-                button.button.is-rounded.is-white キャンセル
-                button.button.is-rounded(:class="[commentText != '' ? 'is-link' : 'is-light']" @click="sendComment") コメント
+                button.button.is-rounded.is-white.m-2 キャンセル
+                button.button.is-rounded.m-2(:class="[commentText != '' ? 'is-link' : 'is-light']" @click="sendComment" :disabled="commentText == ''") コメント
+        .block.notification.is-danger#alertBox(v-if="onErrorMessage && v$.$invalid")
+          button.delete(@click="closeErrorMessage")
+          p.help(v-for="error in v$.$silentErrors" ) {{ error.$message }}
 
         //- コメント
-        CommentCard(v-for="cm in commentList" :key="cm.commentID" :cm="cm")
+        AtomsCommentDefaultCard(v-for="cm in commentList" :key="cm.commentID" :cm="cm")
 
-    .tile.is-parent.is-vertical.p-2.pl-0
-      .is-child.card
+    .column.is-4
+      .card
         .card-image
           img#adCard(:src="adData.thumbnail")
-        .content-row-space-between-center
+        .content-row-space-between
           .content-row-space-left
             figure.image.is-32x32.m-3
               img.is-rounded(:src="adData.sponsor.thumbnail")
@@ -113,17 +117,29 @@
               p.subtitle.is-6 {{ adData.title }}
               p.title.is-size-7 スポンサー・
                 | {{ adData.sponsor.link }}
-          button.button.is-link.is-rounded.p-2.m-3 詳細を確認
+          .content-row-space-right 
+            button.button.is-link.is-rounded.p-2.m-3 詳細を確認
+            button.button.is-white.is-rounded 
+              i.fa-solid.fa-regular.fa-ellipsis-vertical
 
-      .is-child.pt-2
+      .pt-2
         ul.columns.is-multiline
           li.column.is-full(v-for="mv in TopMovieList")
-            MovieCard(:movie="mv")
+            AtomsMovieDefaultCard(:movie="mv")
+
+  //- p(v-else) dddd
+
 </template>
 
 <script setup lang="ts">
-const { getMovies, getMovieById } = useMovies();
-const { getComments } = useCommentes();
+import { useVuelidate } from "@vuelidate/core";
+import {
+  required,
+  requiredIf,
+  minLength,
+  maxLength,
+  helpers,
+} from "@vuelidate/validators";
 
 const userStore = useUserStore();
 const route = useRoute();
@@ -141,7 +157,7 @@ const adData = ref({
   sponsor: {
     sponsorlID: 1,
     name: "スポンサー１スポンサー１スポンサー１",
-    thumbnail: "/channelImg.png",
+    thumbnail: "/channels/channelImg.png",
     link: "www.example.com",
   },
 });
@@ -158,13 +174,16 @@ function changeOpenDescription() {
 }
 
 const isLoading = ref(true);
-const movieData = await getMovieById(movieID);
-const commentList = await getComments(1);
-const TopMovieList = await getMovies();
+const movieData = ref<Movie>(null);
+const commentList = ref([]);
+const TopMovieList = ref<Movie[]>([]);
 
 // 動画のダウンロードはこれでいける
 // →動画用サーバーのURLでやればもっと楽
 onMounted(async () => {
+  movieData.value = useGetMovieById(movieID);
+  TopMovieList.value = await useGetMovies();
+  commentList.value = await useGetComments();
   // 直接動画データがある場合はこんな感じ？
   // const response = await fetch(`http://127.0.0.1:8000/movies/${movieID}/src`);
   // const blob = await response.blob();
@@ -174,23 +193,32 @@ onMounted(async () => {
 });
 
 const commentText = ref("");
+/** バリデーションルール */
+const commentRule = {
+  commentText: {
+    required: helpers.withMessage("コメント：空では投稿できません。", required),
+    maxLength: helpers.withMessage(
+      "コメント：300文字でお願いします。",
+      maxLength(300)
+    ),
+  },
+};
+/** useVuelidate実行時に$externalResultsを設定 */
+const v$ = useVuelidate(commentRule, { commentText });
+const onErrorMessage = ref(false);
+const onErrorPassMessage = ref(false);
+
+function closeErrorMessage() {
+  onErrorMessage.value = false;
+  onErrorPassMessage.value = false;
+}
+
 async function sendComment() {
-  // この処理もスマートにするならcomposableにまとめておけると良い
-  const { data, error } = await useFetch(`http://127.0.0.1:8000/comments/add`, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-    },
-    body: {
-      comment: commentText.value,
-      movie_id: movieData.id,
-      // channel_id: userStore.authUser,
-      channel_id: 1,
-    },
-  });
-  if (!error.value) {
-    commentText.value = "";
-    alert("コメントしました！");
+  // バリデーション
+  if (!v$.value.$invalid) {
+    useSendComment(movieID, commentText.value);
+  } else {
+    onErrorMessage.value = true;
   }
 }
 
@@ -198,24 +226,7 @@ async function addViewdeMovieHistory(
   viewdeSeconds: number,
   isFinish: boolean = false
 ) {
-  // この処理もcomposableでまとめ書きできるし、動画視聴のみで支度買わないと考えるとここにおいてもいいかなと
-  // チャンネルは自分のチャンネル(認証後storeしたデータ)を入れること
-  const { data, error } = await useFetch(
-    `http://127.0.0.1:8000/movies/history/add`,
-    {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: {
-        view_second: viewdeSeconds,
-        movie_id: movieData.id,
-        // channel_id: userStore.authUser,
-        channel_id: 1,
-        is_watched: isFinish,
-      },
-    }
-  );
+  useAddViewdeMovieHistory(movieID, viewdeSeconds, isFinish);
 }
 
 // 動画設定

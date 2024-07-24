@@ -1,16 +1,15 @@
 <template lang="pug">
-#homeView
-  .tabs.content-row-space-left.p-3.m-0.janruTab
-    button.button.is-small.mr-3(v-for="janru in janruList" :key="janru.cd" :class="[janru.cd == nowJanru ? 'is-black':'is-light']" @click="filterMovie(janru.cd)") {{ janru.title }}
+div
+  .content-row-space-left.p-3.m-0.janruTab
+    button.button.is-small.mx-3(v-for="janru in janruList" :key="janru.cd" :class="[janru.cd == nowJanru ? 'is-black':'is-light']" @click="filterMovie(janru.cd)") {{ janru.title }}
     
   ul.columns.is-multiline.p-4.pt-6
     li.column.is-one-third(v-for="mv in TopMovieList")
-      MovieCard(:movie="mv")
+      AtomsMovieDefaultCard(:movie="mv")
 
 </template>
 
 <script setup lang="ts">
-const { getMovies } = useMovies();
 definePageMeta({
   middleware: "check-auth",
 });
@@ -26,10 +25,14 @@ const janruList = [
 
 async function filterMovie(cd: number) {
   nowJanru.value = cd;
-  TopMovieList.value = ref(await getMovies(nowJanru.value));
+  TopMovieList.value = await useGetMovies(nowJanru.value);
 }
 
-const TopMovieList = ref(await getMovies());
+const TopMovieList = ref([]);
+
+onMounted(async () => {
+  TopMovieList.value = await useGetMovies();
+});
 </script>
 
 <style lang="scss" scoped>
@@ -38,7 +41,7 @@ const TopMovieList = ref(await getMovies());
 }
 .janruTab {
   position: fixed;
-  z-index: 10;
+  z-index: 5;
   width: 100%;
   background-color: white;
 }

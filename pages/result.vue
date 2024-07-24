@@ -34,7 +34,7 @@ const TopMovieList = ref([
     channel: {
       channelID: 1,
       name: "チャンネル名１チャンネル名１チャンネル名１チャンネル名１チャンネル名１",
-      thumbnail: "/channelImg.png",
+      thumbnail: "/channels/channelImg.png",
     },
   },
   {
@@ -51,7 +51,7 @@ const TopMovieList = ref([
     channel: {
       channelID: 2,
       name: "チャンネル名１チャンネル名１チャンネル名１チャンネル名１チャンネル名１",
-      thumbnail: "/channelImg.png",
+      thumbnail: "/channels/channelImg.png",
     },
   },
   {
@@ -68,7 +68,7 @@ const TopMovieList = ref([
     channel: {
       channelID: 3,
       name: "チャンネル名１チャンネル名１チャンネル名１チャンネル名１チャンネル名１",
-      thumbnail: "/channelImg.png",
+      thumbnail: "/channels/channelImg.png",
     },
   },
   {
@@ -85,7 +85,7 @@ const TopMovieList = ref([
     channel: {
       channelID: 4,
       name: "チャンネル名１チャンネル名１チャンネル名１チャンネル名１チャンネル名１",
-      thumbnail: "/channelImg.png",
+      thumbnail: "/channels/channelImg.png",
     },
   },
   {
@@ -102,7 +102,7 @@ const TopMovieList = ref([
     channel: {
       channelID: 5,
       name: "チャンネル名１チャンネル名１チャンネル名１チャンネル名１チャンネル名１",
-      thumbnail: "/channelImg.png",
+      thumbnail: "/channels/channelImg.png",
     },
   },
   {
@@ -119,7 +119,7 @@ const TopMovieList = ref([
     channel: {
       channelID: 6,
       name: "チャンネル名１チャンネル名１チャンネル名１チャンネル名１チャンネル名１",
-      thumbnail: "/channelImg.png",
+      thumbnail: "/channels/channelImg.png",
     },
   },
 ]);

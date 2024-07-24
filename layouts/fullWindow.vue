@@ -1,14 +1,16 @@
 <template lang="pug">
-#app
-  Header.header(v-model:buger-active="bugerActive")
-  main.page-full-content
+header.head-content
+  AtomsHeader(:buger-active="bugerActive")
+.page-content
+  main
     slot 
 </template>
+
 <script setup lang="ts">
 const bugerActive = ref(false);
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 *,
 *:before,
 *:after {
@@ -19,19 +21,49 @@ const bugerActive = ref(false);
 html {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-}
-.page-full-content {
-  position: relative;
-  padding-top: 70px;
-}
-.header {
-  position: fixed;
-}
+  // font-size: 62.5%;
 
-#app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  // color: #2c3e50;
+}
+
+.head-content {
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  // height: 102px;
+  z-index: 10;
+}
+.page-content {
+  position: relative;
+  left: 0px;
+  padding-top: 70px;
+  width: 100vw;
+  min-height: 82vh;
+}
+// ページ移動時のcss
+// 右から入って左に抜けてくアニメーション
+.v-enter {
+  transform: translate(-100px, 0);
+  opacity: 0;
+}
+.v-enter-to {
+  opacity: 1;
+}
+.v-enter-active {
+  transition: all 1s 0s ease;
+}
+.v-leave {
+  transform: translate(0, 0);
+  opacity: 1;
+}
+.v-leave-to {
+  transform: translate(100px, 0);
+  opacity: 0;
+}
+.v-leave-active {
+  transition: all 0.5s 0s ease;
 }
 </style>
