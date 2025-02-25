@@ -69,7 +69,7 @@ nav.navbar.content-row-space-between.px-2
       span.tag.is-hoverable(v-for="janru in janruList" :class="{'is-black':janru==selectedJanru}" @click="selectJanru(janru)") {{ janru }}
 
     ul.columns.is-multiline
-      li.column.is-one-quarter(v-for="movie in movieList")
+      li.column.is-one-third(v-for="movie in movieList")
         .card.mb-0
           .card-image
             figure.image.is-16by9
