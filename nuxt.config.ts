@@ -6,5 +6,7 @@ export default defineNuxtConfig({
     '@fortawesome/fontawesome-free/css/all.css',
     // 'bulma/css/bulma.css',
     'bulma/css/versions/bulma-no-dark-mode.css',
+
+    'assets/css/style.css',
   ],
 })
