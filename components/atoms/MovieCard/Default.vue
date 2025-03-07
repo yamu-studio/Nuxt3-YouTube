@@ -3,7 +3,7 @@
   .is-relative
     figure.image.is-16by9
       img.rounded-content(:src="movie.thumbnail" alt="Thumbnail")
-    p.is-size-7.px-1#movie-time {{ formatMovieTime(movie.time) }}
+    p.is-size-7.px-1#movieTime {{ formatMovieTime(movie.time) }}
   .p-1.pt-2
     .media
       .media-left
@@ -44,7 +44,7 @@ const props = defineProps<{
   overflow: hidden;
 }
 
-#movie-time {
+#movieTime {
   position: absolute;
   bottom: 8px;
   right: 6px;

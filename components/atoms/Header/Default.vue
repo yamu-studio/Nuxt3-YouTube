@@ -1,6 +1,6 @@
 <template lang="pug">
 //- ヘッダー
-nav.navbar.content-row-space-between.px-3
+nav.navbar.content-row-space-between.px-4
   //- 左側
   .content-row-space-left
     .navbar-item.navbar-burger
@@ -15,7 +15,7 @@ nav.navbar.content-row-space-between.px-3
   .content-row-space-center
     .navbar-item
       input.input.rounded-content-left(placeholder="検索")
-      button.button.rounded-content-right#search-btn
+      button.button.rounded-content-right#searchBtn
         span.icon
           i.fas.fa-lg.fa-magnifying-glass
     .navbar-item
@@ -47,11 +47,11 @@ nav.navbar.content-row-space-between.px-3
   gap: 0px;
 }
 
-#search-btn {
+#searchBtn {
   width: 64px;
 }
 
-#channel-thumbnail {
+#channelThumbnail {
   height: 48px;
   width: 48px;
 }

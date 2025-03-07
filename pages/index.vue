@@ -62,6 +62,6 @@ const movieList = await useGetMovies();
 <style scoped>
 /* サイドバー編 */
 #sidebar {
-  width: 80px;
+  width: 72px;
 }
 </style>
