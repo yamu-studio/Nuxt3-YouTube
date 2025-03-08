@@ -41,15 +41,14 @@ AtomsHeaderDefault
             span.has-text-grey ・チャンネル登録者数 {{ formatMillBillUnit(channelData.subscribers) }}人・{{ formatMillBillUnit(channelData.movies) }} 本の動画
         
         .content-row-space-left.py-1
-          NuxtLink
-            span.has-text-grey.is-size-7#channelDescription {{ channelData.description }}
+          NuxtLink.has-text-grey.is-size-7#channelDescription {{ channelData.description }}
           NuxtLink
             span.icon.has-text-grey
               i.fas.fa-angle-right
         
-        .content-row-space-left.py-1
+        .content-row-space-left.py-1(v-if="0 < channelData.links.length")
           NuxtLink {{ channelData.links[0] }}
-          NuxtLink.has-text-grey.is-size-7 、他 {{ channelData.links.length - 1 }} 件のリンク
+          NuxtLink.has-text-grey.is-size-7(v-if="1 < channelData.links.length") 、他 {{ channelData.links.length - 1 }} 件のリンク
           
         button.button.is-black.is-rounded.my-3 チャンネル登録
 
