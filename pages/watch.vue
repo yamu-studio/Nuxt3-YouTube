@@ -123,7 +123,7 @@ AtomsHeaderDefault
       ul.columns.is-multiline.pt-2
         li.column.is-full(v-for="movie in TopMovieList")
           NuxtLink(:to="`/watch?v=${movie.movieID}`")
-            AtomsMovieCardWithTitle(:movie="movie")
+            AtomsMovieCardSimple(:movie="movie")
 
 </template>
 

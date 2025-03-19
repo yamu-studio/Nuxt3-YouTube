@@ -78,7 +78,7 @@ AtomsHeaderDefault
         p.is-size-7.cut-max-length マイページ
 
   //- メイン
-  .width-full.px-3
+  .width-full.px-6
     .content-row-space-between
       //- ジャンルの部分
       .tags.are-medium
@@ -92,7 +92,7 @@ AtomsHeaderDefault
     ul.columns.is-multiline
       li.column.is-full(v-for="movie in movieList")
         NuxtLink(:to="`/watch?v=${movie.movieID}`")
-          AtomsMovieCardSearchedCard(:movie="movie")
+          AtomsMovieCardWithDescription(:movie="movie")
 
 </template>
 

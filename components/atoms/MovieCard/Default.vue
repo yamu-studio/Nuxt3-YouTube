@@ -1,5 +1,5 @@
 <template lang="pug">
-.card
+div
   .is-relative
     figure.image.is-16by9
       img.rounded-content(:src="movie.thumbnail" alt="Thumbnail")
@@ -26,10 +26,6 @@ const props = defineProps<{
 </script>
 
 <style scoped>
-.card {
-  box-shadow: none;
-}
-
 #movieTitle {
   display: -webkit-box;
   -webkit-box-orient: vertical;
