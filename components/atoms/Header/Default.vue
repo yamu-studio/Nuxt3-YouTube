@@ -35,7 +35,7 @@ nav.navbar.content-row-space-between.px-4
         span.icon
           i.far.fa-lg.fa-bell
     .navbar-item
-      button.button.is-rounded.p-2.is-48x48
+      button.button.is-rounded.p-2#channelThumbnail
         img(src="/channels/thumbnail_1.png")
 
 </template>

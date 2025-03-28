@@ -1,18 +1,18 @@
 <template lang="pug">
-.card
+div
   .is-relative
     figure.image.is-16by9
-      img.rounded-content(:src="movie.thumbnail" alt="Thumbnail")
-    p.is-size-7.px-1#movieTime {{ formatMovieTime(movie.time) }}
+      img.rounded-content(:src="movie.info.thumbnailUrl" alt="Thumbnail")
+    p.is-size-7.px-1#movieTime {{ formatMovieTime(movie.timeLongth) }}
   .p-1.pt-2
     .media
       .media-left
         figure.image.is-32x32
-          img.is-rounded(:src="movie.channel.thumbnail" alt="Channel image")
+          img.is-rounded(:src="movie.channel.info.thumbnailUrl" alt="Channel image")
       .media-content.content.has-text-left 
-        p.title.is-6.m-0#movieTitle {{ movie.title }}
-        p.help.has-text-grey.m-0#channelName {{ movie.channel.name }}
-        p.help.has-text-grey.m-0 {{ formatMillBillUnit(movie.viewCount) }} 回視聴・{{ formatDateAgo(movie.publishedAt) }}
+        p.title.is-6.m-0#movieTitle {{ movie.info.title }}
+        p.help.has-text-grey.m-0#channelName {{ movie.channel.info.name }}
+        p.help.has-text-grey.m-0 {{ formatMillBillUnit(movie.insight.viewCount) }} 回視聴・{{ formatDateAgo(new Date(movie.info.publishAt)) }}
       .media-right
         button.button.is-white
           span.icon
@@ -26,10 +26,6 @@ const props = defineProps<{
 </script>
 
 <style scoped>
-.card {
-  box-shadow: none;
-}
-
 #movieTitle {
   display: -webkit-box;
   -webkit-box-orient: vertical;

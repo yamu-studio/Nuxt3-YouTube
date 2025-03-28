@@ -56,7 +56,7 @@ function selectJanru(janru: string) {
 }
 
 // 動画系
-const movieList = await useGetMovies();
+const { movies: movieList, status } = await useGetMovies();
 </script>
 
 <style scoped>

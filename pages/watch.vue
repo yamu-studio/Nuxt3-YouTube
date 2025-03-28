@@ -3,12 +3,12 @@
 AtomsHeaderDefault
 
 .container.is-fullhd.p-3
-  .columns
+  .columns(v-if="movieData != null")
     .column.is-8
       video.rounded-content(
         id="movieBox"
         controls
-        v-if="movieData.movie != null && movieData.movie != ''"
+        v-if="movieData.info.movieUrl != null && movieData.info.movieUrl != ''"
         v-on:loadedmetadata="loadingMovie()"
         v-on:play="onPlay()"
         v-on:pause="onPause()"
@@ -17,25 +17,25 @@ AtomsHeaderDefault
         oncontextmenu="return false;"
         playsinline)
         source(
-          :src="movieData.movie"
+          :src="movieData.info.movieUrl"
           type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"')
 
       .has-text-left.p-3
-        p.title.is-5 {{ movieData.title }}
+        p.title.is-5 {{ movieData.info.title }}
         .content-row-space-between
           .content-row-space-left#channelOwnerInfo
             figure.image.is-32x32.m-1
-              img.is-rounded(:src="movieData.channel.thumbnail")
-            NuxtLink.has-text-left(:to="`/channel/${movieData.channel.channelID}`")
-              p.title.is-size-7.cut-max-length#movieChannelName {{ movieData.channel.name }}
-              p.subtitle.is-size-7 チャンネル登録者数 {{ formatMillBillUnit(movieData.channel.subscribers) }}人
+              img.is-rounded(:src="movieData.channel.info.thumbnailUrl")
+            NuxtLink.has-text-left(:to="`/channel/${movieData.channel.info.channelID}`")
+              p.title.is-size-7.cut-max-length#movieChannelName {{ movieData.channel.info.name }}
+              p.subtitle.is-size-7 チャンネル登録者数 {{ formatMillBillUnit(movieData.channel.insight.subscriberCount) }}人
             button.button.is-black.is-rounded.p-2 チャンネル登録
 
           .content-row-space-right 
             button.button.is-light.rounded-content-left
               span.icon
                 i.fa-lg.fa-regular.fa-thumbs-up
-              span {{ formatMillBillUnit(movieData.goods) }}
+              span {{ formatMillBillUnit(movieData.insight.goodCount) }}
             button.button.is-light.rounded-content-right
               span.icon
                 i.fa-lg.fa-regular.fa-thumbs-down
@@ -49,16 +49,16 @@ AtomsHeaderDefault
 
       .div.has-text-left.has-background-light.rounded-content.p-3(v-if="isOpenDescription")
         .content-row-space-left 
-          p.subtitle.is-size-7.m-0.pr-2 {{ movieData.views.toLocaleString() }} 回再生
-          p.subtitle.is-size-7.m-0.pr-2 {{ formatDateAgo(movieData.publishedAt) }}
-          NuxtLink.is-size-7.m-0.pr-2(v-for="tag in movieData.hashTags" :to="`/hashtag/${tag}`") &#035;{{ tag }}
-        p.subtitle.is-size-7.pt-2.mb-0 {{ movieData.description }} 
+          p.subtitle.is-size-7.m-0.pr-2 {{ movieData.insight.viewCount.toLocaleString() }} 回再生
+          p.subtitle.is-size-7.m-0.pr-2 {{ formatDateAgo(new Date(movieData.info.publishAt)) }}
+          //- NuxtLink.is-size-7.m-0.pr-2(v-for="tag in movieData.hashTags" :to="`/hashtag/${tag}`") &#035;{{ tag }}
+        p.subtitle.is-size-7.pt-2.mb-0 {{ movieData.info.description }} 
         .content-row-space-left 
           figure.image.is-96x96.m-1
-            img.is-rounded(:src="movieData.channel.thumbnail")
+            img.is-rounded(:src="movieData.channel.info.thumbnailUrl")
           .has-text-left
-            p.title.is-size-7 {{ movieData.channel.name }}
-            p.subtitle.is-size-7 チャンネル登録者数 {{ formatMillBillUnit(movieData.channel.subscribers) }}人
+            p.title.is-size-7 {{ movieData.channel.info.name }}
+            p.subtitle.is-size-7 チャンネル登録者数 {{ formatMillBillUnit(movieData.channel.insight.subscriberCount) }}人
         .content-row-space-between-center
           button.button.is-black.is-outlined.is-rounded.mr-2
             span.icon
@@ -72,15 +72,15 @@ AtomsHeaderDefault
 
       .div.has-text-left.has-background-light.is-rounded.p-3(v-else @click="changeOpenDescription")
         .content-row-space-left 
-          p.subtitle.is-size-7.m-0.pr-2 {{ movieData.views.toLocaleString() }} 回再生
-          p.subtitle.is-size-7.m-0.pr-2 {{ formatDateAgo(movieData.publishedAt) }}
-          NuxtLink.subtitle.is-size-7.has-text-grey.m-0.pr-2(v-for="tag in movieData.hashTags" :to="`/hashtag/${tag}`") {{ tag }}
-        p.subtitle.is-size-7.pt-2.mb-0#movieDescription {{ movieData.description }} 
+          p.subtitle.is-size-7.m-0.pr-2 {{ movieData.insight.viewCount.toLocaleString() }} 回再生
+          p.subtitle.is-size-7.m-0.pr-2 {{ formatDateAgo(new Date(movieData.info.publishAt)) }}
+          //- NuxtLink.subtitle.is-size-7.has-text-grey.m-0.pr-2(v-for="tag in movieData.hashTags" :to="`/hashtag/${tag}`") {{ tag }}
+        p.subtitle.is-size-7.pt-2.mb-0#movieDescription {{ movieData.info.description }} 
         p.subtitle.is-size-7.pt-1 ...もっと見る
 
       .div.has-text-left.p-3
         .content-row-space-left
-          p.has-text-weight-bold.is-size-4 {{ movieData.comments.toLocaleString() }} 件のコメント
+          //- p.has-text-weight-bold.is-size-4 {{ movieData.comments.toLocaleString() }} 件のコメント
           button.button.is-white 
             span.icon
               i.fa-solid.fa-arrow-down-wide-short
@@ -123,7 +123,7 @@ AtomsHeaderDefault
       ul.columns.is-multiline.pt-2
         li.column.is-full(v-for="movie in TopMovieList")
           NuxtLink(:to="`/watch?v=${movie.movieID}`")
-            AtomsMovieCardWithTitle(:movie="movie")
+            AtomsMovieCardSimple(:movie="movie")
 
 </template>
 
@@ -159,13 +159,14 @@ function changeOpenDescription() {
   isOpenDescription.value = !isOpenDescription.value;
 }
 
-const isLoading = ref(true);
-const movieData = await useGetMovieById(movieID);
+const { movie: movieData } = await useGetMovieById(movieID);
 const commentList = await useGetComments(movieID);
-const TopMovieList = await useGetMovies();
+const { movies: TopMovieList } = await useGetMovies();
 
 const commentText = ref("");
 async function sendComment() {
+  // コメントを送信する
+  // →次回以降で解説
   console.log(commentText.value);
 }
 
@@ -175,7 +176,7 @@ async function addViewdeMovieHistory(
 ) {
   // 視聴履歴を保存・更新する
   // →次回以降で解説
-  // useAddViewdeMovieHistory(movieID, viewdeSeconds, isFinish);
+  // useUpdateMovieHistory(movieID, viewdeSeconds, isFinish);
 }
 
 // 動画設定
