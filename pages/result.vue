@@ -101,7 +101,7 @@ const route = useRoute();
 const search_query =
   route.query.search_query != undefined ? route.query.search_query : null;
 
-const movieList = await useGetMovies();
+const { movies: movieList } = await useGetMovies();
 
 const nowJanru = ref(0);
 const janruList = [

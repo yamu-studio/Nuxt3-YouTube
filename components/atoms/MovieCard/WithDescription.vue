@@ -1,16 +1,16 @@
 <template lang="pug">
 #movieCard
   #movieThumbnail 
-    img(:src="movie.thumbnail" alt="Thumbnail")
-    p.is-size-7.px-1#movieTime {{ formatMovieTime(movie.time) }}
+    img(:src="movie.info.thumbnailUrl" alt="Thumbnail")
+    p.is-size-7.px-1#movieTime {{ formatMovieTime(movie.timeLongth) }}
   #movieInfo
-    p.title.is-5.m-0#movieTitle {{ movie.title }}
-    p.help.has-text-grey.my-1 {{ formatMillBillUnit(movie.viewCount) }} 回視聴・{{ formatDateAgo(movie.publishedAt) }}
+    p.title.is-5.m-0#movieTitle {{ movie.info.title }}
+    p.help.has-text-grey.my-1 {{ formatMillBillUnit(movie.insight.viewCount) }} 回視聴・{{ formatDateAgo(new Date(movie.info.publishAt)) }}
     .content-row-space-left.py-3
       figure.image.is-32x32.is-no-shrink
-        img.is-rounded(:src="movie.channel.thumbnail" alt="Channel image")
-      p.help.has-text-grey.mx-2#channelName {{ movie.channel.name }}
-    p.help.has-text-grey.m-0#movieDescription {{ movie.description }}
+        img.is-rounded(:src="movie.channel.info.thumbnailUrl" alt="Channel image")
+      p.help.has-text-grey.mx-2#channelName {{ movie.channel.info.name }}
+    p.help.has-text-grey.m-0#movieDescription {{ movie.info.description }}
   
 </template>
 
