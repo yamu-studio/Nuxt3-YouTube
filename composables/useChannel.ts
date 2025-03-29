@@ -1,57 +1,43 @@
-export async function useGetChannels() {
-  let returnValue = [
-    {
-      id: 1,
-      channelID: 'aaa',
-      accountID: 'yamu-studio',
-      name: 'チャンネル名１チャンネル名１チャンネル名１チャンネル名１チャンネル名１',
-      description:
-        '概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です',
-      backImg: '/channels/backImg_1.png',
-      thumbnail: '/channels/thumbnail_1.png',
-      subscribers: 1224,
-      movies: 123,
-    },
-    {
-      id: 2,
-      channelID: 'bbb',
-      accountID: 'yamu-studio',
-      name: 'チャンネル名2',
-      description: '概要欄',
-      backImg: '/channels/backImg_1.png',
-      thumbnail: '/channels/thumbnail_1.png',
-      subscribers: 1224,
-      movies: 123,
-    },
-    {
-      id: 3,
-      channelID: 'ccc',
-      accountID: 'yamu-studio',
-      name: 'チャンネル名3',
-      description: '概要欄',
-      backImg: '/channels/backImg_1.png',
-      thumbnail: '/channels/thumbnail_1.png',
-      subscribers: 1224,
-      movies: 123,
-    },
-  ]
+export async function useGetChannelByID(channelID: string) {
+  const { data, status } = await useFetch(
+    `http://127.0.0.1:8000/youtube/channels/${channelID}`
+  )
 
-  return returnValue
+  return {
+    channel: data,
+    status,
+  }
 }
 
-export async function useGetChannelByID(channelID: string) {
-  let returnValue = {
-    id: 1,
-    channelID: 'aaa',
-    accountID: 'yamu-studio',
-    name: 'チャンネル名１チャンネル名１チャンネル名１チャンネル名１チャンネル名１',
-    description:
-      '概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です概要欄です',
-    links: ['example.com/abcde', 'example2.com/abcde2', 'example3.com/abcde3'],
-    backImg: '/channels/backImg_1.png',
-    thumbnail: '/channels/thumbnail_1.png',
-    subscribers: 1224,
-    movies: 123,
+export async function useGetIsSubscribeChannel(id: number) {
+  const { data, status } = await useFetch(
+    `http://127.0.0.1:8000/youtube/channels/${id}/issubscribe`
+  )
+
+  return {
+    isSubscribe: data,
+    status,
   }
-  return returnValue
+}
+
+export async function useSubscribeChannel(id: number) {
+  const response = await $fetch(
+    `http://127.0.0.1:8000/youtube/channels/${id}/subscribe`,
+    {
+      method: 'POST',
+      query: { my_channel_id: 2 },
+    }
+  )
+  return response
+}
+
+export async function useUnSubscribeChannel(id: number) {
+  const response = await $fetch(
+    `http://127.0.0.1:8000/youtube/channels/${id}/unsubscribe`,
+    {
+      method: 'DELETE',
+      query: { my_channel_id: 2 },
+    }
+  )
+  return response
 }

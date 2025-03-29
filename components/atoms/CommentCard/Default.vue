@@ -5,7 +5,7 @@
   .is-flex-fill
     .content-row-space-left.p-2
       p.title.is-size-7.cutMaxLength.m-0 {{ `@${comment.channel.channelID}` }}
-      p.subtitle.is-size-7.cutMaxLength.m-1 {{ formatDateAgo(comment.publishedAt) }} 
+      p.subtitle.is-size-7.cutMaxLength.m-1 {{ formatDateAgo(new Date(comment.publishedAt)) }} 
       p.subtitle.is-size-7.cutMaxLength.m-1(v-if="comment.publishedAt == comment.updatedAt") (編集済み)
     p.subtitle.is-7.pl-2.m-0 {{ comment.comment }}
     

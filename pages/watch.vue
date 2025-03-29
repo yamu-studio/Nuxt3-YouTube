@@ -1,7 +1,4 @@
 <template lang="pug">
-//- ヘッダー
-AtomsHeaderDefault
-
 .container.is-fullhd.p-3
   .columns(v-if="movieData != null")
     .column.is-8
@@ -29,10 +26,10 @@ AtomsHeaderDefault
             NuxtLink.has-text-left(:to="`/channel/${movieData.channel.info.channelID}`")
               p.title.is-size-7.cut-max-length#movieChannelName {{ movieData.channel.info.name }}
               p.subtitle.is-size-7 チャンネル登録者数 {{ formatMillBillUnit(movieData.channel.insight.subscriberCount) }}人
-            button.button.is-black.is-rounded.p-2 チャンネル登録
+            button.button.is-black.is-rounded.mx-2.p-2(@click="channelSubscribe") チャンネル登録
 
           .content-row-space-right 
-            button.button.is-light.rounded-content-left
+            button.button.is-light.rounded-content-left(@click="favoriteMovie")
               span.icon
                 i.fa-lg.fa-regular.fa-thumbs-up
               span {{ formatMillBillUnit(movieData.insight.goodCount) }}
@@ -51,7 +48,7 @@ AtomsHeaderDefault
         .content-row-space-left 
           p.subtitle.is-size-7.m-0.pr-2 {{ movieData.insight.viewCount.toLocaleString() }} 回再生
           p.subtitle.is-size-7.m-0.pr-2 {{ formatDateAgo(new Date(movieData.info.publishAt)) }}
-          //- NuxtLink.is-size-7.m-0.pr-2(v-for="tag in movieData.hashTags" :to="`/hashtag/${tag}`") &#035;{{ tag }}
+          NuxtLink.is-size-7.m-0.pr-2(v-for="tag in movieHashTagList") &#35;{{ tag }}
         p.subtitle.is-size-7.pt-2.mb-0 {{ movieData.info.description }} 
         .content-row-space-left 
           figure.image.is-96x96.m-1
@@ -74,13 +71,13 @@ AtomsHeaderDefault
         .content-row-space-left 
           p.subtitle.is-size-7.m-0.pr-2 {{ movieData.insight.viewCount.toLocaleString() }} 回再生
           p.subtitle.is-size-7.m-0.pr-2 {{ formatDateAgo(new Date(movieData.info.publishAt)) }}
-          //- NuxtLink.subtitle.is-size-7.has-text-grey.m-0.pr-2(v-for="tag in movieData.hashTags" :to="`/hashtag/${tag}`") {{ tag }}
+          NuxtLink.subtitle.is-size-7.has-text-grey.m-0.pr-2(v-for="tag in movieHashTagList") &#35;{{ tag }}
         p.subtitle.is-size-7.pt-2.mb-0#movieDescription {{ movieData.info.description }} 
         p.subtitle.is-size-7.pt-1 ...もっと見る
 
       .div.has-text-left.p-3
         .content-row-space-left
-          //- p.has-text-weight-bold.is-size-4 {{ movieData.comments.toLocaleString() }} 件のコメント
+          p.has-text-weight-bold.is-size-4 {{ commentList.length.toLocaleString() }} 件のコメント
           button.button.is-white 
             span.icon
               i.fa-solid.fa-arrow-down-wide-short
@@ -100,7 +97,9 @@ AtomsHeaderDefault
                 button.button.is-rounded.m-2(:class="[commentText != '' ? 'is-link' : 'is-light']" @click="sendComment" :disabled="commentText == ''") コメント
 
       //- コメント
-      AtomsCommentCardDefault(v-for="comment in commentList" :comment="comment")
+      ul.columns.is-multiline
+        li.column.is-full.py-0(v-for="comment in commentList" )
+          AtomsCommentCardDefault(:comment="comment")
       
     .column.is-4
       //- 広告 → ベタ書きした
@@ -121,7 +120,7 @@ AtomsHeaderDefault
               i.fa-solid.fa-regular.fa-ellipsis-vertical
               
       ul.columns.is-multiline.pt-2
-        li.column.is-full(v-for="movie in TopMovieList")
+        li.column.is-full(v-for="movie in topMovieList")
           NuxtLink(:to="`/watch?v=${movie.movieID}`")
             AtomsMovieCardSimple(:movie="movie")
 
@@ -149,7 +148,7 @@ const adData = ref({
 });
 
 const movieID = route.query.v != undefined ? route.query.v : null;
-const startSeconds =
+let startSeconds =
   route.query.s != undefined && isFinite(route.query.s)
     ? Number(route.query.s)
     : 0;
@@ -160,23 +159,47 @@ function changeOpenDescription() {
 }
 
 const { movie: movieData } = await useGetMovieById(movieID);
-const commentList = await useGetComments(movieID);
-const { movies: TopMovieList } = await useGetMovies();
+
+const { comments: commentList } = await useGetComments(movieData.value.id);
+const { history } = await useGetMovieHistoryByMovieId(movieData.value.id);
+const { movies: topMovieList } = await useGetMovies();
+if (history.value) {
+  startSeconds = history.value.view_second;
+}
+
+const movieHashTagList = computed(() => {
+  return ["ゲーム", "初心者", "歌ってみた"];
+});
+
+function channelSubscribe() {
+  useSubscribeChannel(movieData.value.channel.id)
+    .then(() => {
+      alert("チャンネル登録完了！");
+    })
+    .catch((e) => {
+      alert("チャンネル登録失敗しました。");
+    });
+}
+
+function favoriteMovie() {
+  useFavoriteMovie(movieData.value.channel.id);
+}
 
 const commentText = ref("");
 async function sendComment() {
   // コメントを送信する
-  // →次回以降で解説
-  console.log(commentText.value);
+  useAddComment(commentText.value, movieData.value.id);
+  alert("コメント送信しました");
+  commentText.value = "";
 }
 
 async function addViewdeMovieHistory(
-  viewdeSeconds: number,
+  viewdeSecond: number,
   isFinish: boolean = false
 ) {
   // 視聴履歴を保存・更新する
   // →次回以降で解説
-  // useUpdateMovieHistory(movieID, viewdeSeconds, isFinish);
+  useUpdateMovieHistory(movieData.value.id, viewdeSecond, isFinish);
 }
 
 // 動画設定
@@ -206,6 +229,10 @@ function onEnded() {
 </script>
 
 <style scoped>
+#movieBox {
+  max-height: 540px;
+  width: 100%;
+}
 #adCard {
   height: 60px;
   width: 100%;
