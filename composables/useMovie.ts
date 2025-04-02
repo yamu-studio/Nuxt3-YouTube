@@ -1,6 +1,23 @@
 export async function useGetMovies(janruCD = -1) {
   const { data, status } = await useFetch(
-    'http://127.0.0.1:8000/youtube/movies'
+    'http://127.0.0.1:8000/youtube/movies',
+    {
+      query: { janru_cd: janruCD },
+    }
+  )
+
+  return {
+    movies: data,
+    status,
+  }
+}
+
+export async function useSearchMoviesByWord(word: string) {
+  const { data, status } = await useFetch(
+    'http://127.0.0.1:8000/youtube/search',
+    {
+      query: { word: word, limit: 30 },
+    }
   )
 
   return {

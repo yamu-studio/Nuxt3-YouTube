@@ -14,8 +14,8 @@ nav.navbar.content-row-space-between.px-4
   //- 真ん中
   .content-row-space-center
     .navbar-item
-      input.input.rounded-content-left(placeholder="検索")
-      button.button.rounded-content-right#searchBtn
+      input.input.rounded-content-left(placeholder="検索" v-model="searchWord")
+      button.button.rounded-content-right#searchBtn(@click="goSearch")
         span.icon
           i.fas.fa-lg.fa-magnifying-glass
     .navbar-item
@@ -95,6 +95,11 @@ const UserStore = useUserStore();
 const isOpenUploadModal = ref(false);
 function toggleModal() {
   isOpenUploadModal.value = !isOpenUploadModal.value;
+}
+
+const searchWord = ref("");
+function goSearch() {
+  navigateTo(`/result?search_query=${searchWord.value}`);
 }
 
 const isLoading = ref(false);
