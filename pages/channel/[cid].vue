@@ -4,7 +4,8 @@ div(v-if="channelData")
     img.rounded-content#channelBackImg(:src="channelData.backImg")
 
   .content-row-space-left-top.p-2.pt-5
-    img.is-rounded#channelIcon(:src="channelData.thumbnail")
+    figure.image.is-no-shrink
+      img.is-rounded#channelIcon(:src="channelData.thumbnail" alt="Channel image")
     .has-text-left.is-flex-fill.mx-2
       p.title.m-0.p-2 {{ channelData.name }}
       .content-row-space-left
@@ -49,7 +50,7 @@ div(v-if="channelData")
       span.tag.is-hoverable(v-for="order in orderList" :class="[order.cd == nowOrder ? 'is-black':'is-light']" @click="changeOrder(order.cd)") {{ order.title }}
 
     ul.columns.is-multiline(v-if="tabNo == 1")
-      li.column.is-one-third(v-for="mv in chMovieList")
+      li.column.is-one-third(v-for="mv in showMovieList")
         NuxtLink(:to="`/watch?v=${mv.movieID}`")
           AtomsMovieCardDefault(:movie="mv")
 
@@ -66,7 +67,9 @@ div(v-if="channelData")
 const channelID = useRoute().params.cid as string;
 
 const { channel: channelData } = await useGetChannelByID(channelID);
-const { movies: chMovieList } = await useGetMovies();
+const { movies: chMovieList } = await useGetMoviesByChannelID(
+  channelData.value.id
+);
 
 const tabNo = ref(1);
 function moveTag(i: number) {
@@ -74,13 +77,30 @@ function moveTag(i: number) {
 }
 
 const nowOrder = ref(0);
+const showMovieList = ref<MovieMaster[]>([]);
 const orderList = [
   { title: "新しい順", cd: 0 },
   { title: "人気の動画", cd: 1 },
   { title: "古い順", cd: 2 },
 ];
+
+// ※現場取得してるもののみで並び替えしてる
+// →毎回APIで取得すれば正確だけどやらない
 function changeOrder(i: number) {
   nowOrder.value = i;
+  if (i == 0) {
+    showMovieList.value = chMovieList.value.sort(function (a, b) {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+  } else if (i == 1) {
+    showMovieList.value = chMovieList.value.sort(function (a, b) {
+      return b.insight?.viewCount - a.insight?.viewCount;
+    });
+  } else if (i == 2) {
+    showMovieList.value = chMovieList.value.sort(function (a, b) {
+      return new Date(a.createdAt) - new Date(b.createdAt);
+    });
+  }
 }
 
 function channelSubscribe() {
@@ -107,6 +127,10 @@ const isOpenSearchForm = ref(false);
 function fetchSearchForm() {
   isOpenSearchForm.value = !isOpenSearchForm.value;
 }
+
+onMounted(() => {
+  changeOrder(0);
+});
 </script>
 
 <style scoped>
@@ -118,12 +142,14 @@ function fetchSearchForm() {
 #channelIcon {
   width: 160px;
   height: 160px;
+  object-fit: cover;
 }
 
 #channelDescription {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
+  white-space: pre-wrap;
   overflow: hidden;
 }
 

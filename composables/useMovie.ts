@@ -1,8 +1,38 @@
+// ※本来は自分の情報(ログイン者の情報:UserStore.authChannel.idとか)を
+// queryやbodyに置くのはよろしくない(セキュリティ的に)
+
 export async function useGetMovies(janruCD = -1) {
+  const UserStore = useUserStore()
+
+  const query = {
+    janru_cd: janruCD,
+  }
+
+  if (UserStore.isLogin) {
+    query.my_channel_id = UserStore.authChannel.id
+  }
+
   const { data, status } = await useFetch(
     'http://127.0.0.1:8000/youtube/movies',
     {
-      query: { janru_cd: janruCD },
+      query: query,
+    }
+  )
+
+  return {
+    movies: data,
+    status,
+  }
+}
+
+export async function useGetMoviesByChannelID(channelID: number) {
+  const UserStore = useUserStore()
+  const { data, status } = await useFetch<MovieMaster[]>(
+    'http://127.0.0.1:8000/youtube/movies',
+    {
+      query: {
+        channel_id: channelID,
+      },
     }
   )
 

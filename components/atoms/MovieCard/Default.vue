@@ -7,8 +7,8 @@ div
   .p-1.pt-2
     .media
       .media-left
-        figure.image.is-32x32
-          img.is-rounded(:src="movie.channel.info.thumbnailUrl" alt="Channel image")
+        figure.image
+          img.is-rounded#channelIcon(:src="movie.channel.info.thumbnailUrl" alt="Channel image")
       .media-content.content.has-text-left 
         p.title.is-6.m-0#movieTitle {{ movie.info.title }}
         p.help.has-text-grey.m-0#channelName {{ movie.channel.info.name }}
@@ -38,6 +38,12 @@ const props = defineProps<{
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
   overflow: hidden;
+}
+
+#channelIcon {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
 }
 
 #movieTime {

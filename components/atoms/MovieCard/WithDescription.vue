@@ -7,8 +7,8 @@
     p.title.is-5.m-0#movieTitle {{ movie.info.title }}
     p.help.has-text-grey.my-1 {{ formatMillBillUnit(movie.insight.viewCount) }} 回視聴・{{ formatDateAgo(new Date(movie.info.publishAt)) }}
     .content-row-space-left.py-3
-      figure.image.is-32x32.is-no-shrink
-        img.is-rounded(:src="movie.channel.info.thumbnailUrl" alt="Channel image")
+      figure.image.is-no-shrink
+        img.is-rounded#channelIcon(:src="movie.channel.info.thumbnailUrl" alt="Channel image")
       p.help.has-text-grey.mx-2#channelName {{ movie.channel.info.name }}
     p.help.has-text-grey.m-0#movieDescription {{ movie.info.description }}
   
@@ -59,6 +59,12 @@ const props = defineProps<{
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
   overflow: hidden;
+}
+
+#channelIcon {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
 }
 
 #movieTime {

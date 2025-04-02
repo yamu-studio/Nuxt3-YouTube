@@ -11,7 +11,7 @@ export default defineNuxtConfig({
     ],
   ],
   imports: {
-    dirs: ['stores'],
+    dirs: ['stores', 'types/**'],
   },
   css: [
     '@fortawesome/fontawesome-free/css/all.css',
