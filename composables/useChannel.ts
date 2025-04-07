@@ -9,14 +9,15 @@ export async function useGetChannelByID(channelID: string) {
   }
 }
 
-export async function useGetIsSubscribeChannel(id: number) {
-  const { data, status } = await useFetch(
-    `http://127.0.0.1:8000/youtube/channels/${id}/issubscribe`
+export async function useGetSubscribeChannel(id: number) {
+  const { data, status, refresh } = await useFetch(
+    `http://127.0.0.1:8000/youtube/channels/${id}/is-subscribe?my_channel_id=2`
   )
 
   return {
-    isSubscribe: data,
+    subscribe: data,
     status,
+    refresh,
   }
 }
 
@@ -33,7 +34,7 @@ export async function useSubscribeChannel(id: number) {
 
 export async function useUnSubscribeChannel(id: number) {
   const response = await $fetch(
-    `http://127.0.0.1:8000/youtube/channels/${id}/unsubscribe`,
+    `http://127.0.0.1:8000/youtube/channels/${id}/un-subscribe`,
     {
       method: 'DELETE',
       query: { my_channel_id: 2 },

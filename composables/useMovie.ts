@@ -66,12 +66,38 @@ export async function useGetMovieById(movieID: string) {
   }
 }
 
+export async function useGetFavoriteMovie(id: number, isBad = false) {
+  // queryを直書きするとこんな感じ
+  // ※本来、ユーザー情報をqueryで渡すのはNG
+  const { data, status, refresh } = await useFetch(
+    `http://127.0.0.1:8000/youtube/movies/${id}/favorite?my_channel_id=2`
+  )
+
+  return {
+    favorite: data,
+    status,
+    refresh,
+  }
+}
+
 export async function useFavoriteMovie(id: number, isBad = false) {
+  // queryを外に出して書くこともできる
   const response = await $fetch(
     `http://127.0.0.1:8000/youtube/movies/${id}/favorite`,
     {
       method: 'POST',
       query: { my_channel_id: 2, is_bad: isBad },
+    }
+  )
+  return response
+}
+
+export async function useUnFavoriteMoviel(id: number) {
+  const response = await $fetch(
+    `http://127.0.0.1:8000/youtube/movies/${id}/un-favorite`,
+    {
+      method: 'DELETE',
+      query: { my_channel_id: 2 },
     }
   )
   return response

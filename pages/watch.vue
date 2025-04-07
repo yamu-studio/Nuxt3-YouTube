@@ -26,16 +26,23 @@
             NuxtLink.has-text-left(:to="`/channel/${movieData.channel.info.channelID}`")
               p.title.is-size-7.cut-max-length#movieChannelName {{ movieData.channel.info.name }}
               p.subtitle.is-size-7 チャンネル登録者数 {{ formatMillBillUnit(movieData.channel.insight.subscriberCount) }}人
-            button.button.is-black.is-rounded.mx-2.p-2(@click="channelSubscribe") チャンネル登録
+            button.button.is-light.is-rounded.mx-2.px-4.py-2(v-if="chSubscribe" @click="channelUnSubscribe") 
+              span.icon
+                .fa-solid.fa-user-minus
+              span 登録解除
+            button.button.is-black.is-rounded.mx-2.p-2(v-else @click="channelSubscribe") チャンネル登録
+    
 
           .content-row-space-right 
+            //- ※favoriteMovieに引数(isBad)をつけるなら...
+            //- button.button.is-light.rounded-content-left(@click="() => favoriteMovie(true/false)")
             button.button.is-light.rounded-content-left(@click="favoriteMovie")
               span.icon
-                i.fa-lg.fa-regular.fa-thumbs-up
+                i.fa-lg.fa-thumbs-up(:class="[movieFavorite && !movieFavorite.is_bad?'fa-solid':'fa-regular']")
               span {{ formatMillBillUnit(movieData.insight.goodCount) }}
-            button.button.is-light.rounded-content-right
+            button.button.is-light.rounded-content-right(@click="disFavoriteMovie")
               span.icon
-                i.fa-lg.fa-regular.fa-thumbs-down
+                i.fa-lg.fa-thumbs-down(:class="[movieFavorite && movieFavorite.is_bad?'fa-solid':'fa-regular']")
             button.button.is-light.is-rounded.m-1
               span.icon
                 i.fa-lg.fas.fa-share
@@ -160,6 +167,11 @@ function changeOpenDescription() {
 
 const { movie: movieData } = await useGetMovieById(movieID);
 
+const { favorite: movieFavorite, refresh: favoriteReload } =
+  await useGetFavoriteMovie(movieData.value.id);
+const { subscribe: chSubscribe, refresh: chSubscribeReload } =
+  await useGetSubscribeChannel(movieData.value.channel.id);
+
 const { comments: commentList } = await useGetComments(movieData.value.id);
 const { history } = await useGetMovieHistoryByMovieId(movieData.value.id);
 const { movies: topMovieList } = await useGetMovies();
@@ -178,12 +190,51 @@ function channelSubscribe() {
     })
     .catch((e) => {
       alert("チャンネル登録失敗しました。");
-    });
+    })
+    .finally(() => chSubscribeReload());
 }
 
-function favoriteMovie() {
-  useFavoriteMovie(movieData.value.channel.id);
+function channelUnSubscribe() {
+  useUnSubscribeChannel(movieData.value.channel.id)
+    .then(() => {
+      alert("チャンネル登録解除しました");
+    })
+    .catch((e) => {
+      alert("チャンネル登録解除失敗しました。");
+    })
+    .finally(() => chSubscribeReload());
 }
+
+async function favoriteMovie() {
+  if (movieFavorite.value) {
+    await useUnFavoriteMoviel(movieData.value.channel.id);
+    movieFavorite.value = null;
+  } else {
+    await useFavoriteMovie(movieData.value.channel.id);
+  }
+  await favoriteReload();
+}
+
+async function disFavoriteMovie() {
+  if (movieFavorite.value) {
+    await useUnFavoriteMoviel(movieData.value.channel.id);
+    movieFavorite.value = null;
+  } else {
+    await useFavoriteMovie(movieData.value.channel.id, true);
+  }
+  await favoriteReload();
+}
+
+// ※favoriteMovieに引数(isBad)をつけてやるなら...
+// async function favoriteMovie(isBad:boolean) {
+//   if (movieFavorite.value) {
+//     await useUnFavoriteMoviel(movieData.value.channel.id);
+//     movieFavorite.value = null;
+//   } else {
+//     await useFavoriteMovie(movieData.value.channel.id, isBad);
+//   }
+//   await favoriteReload();
+// }
 
 const commentText = ref("");
 async function sendComment() {

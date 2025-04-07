@@ -23,7 +23,13 @@ div(v-if="channelData")
         NuxtLink {{ channelData.links[0] }}
         NuxtLink.has-text-grey.is-size-7(v-if="1 < channelData.links.length") 、他 {{ channelData.links.length - 1 }} 件のリンク
         
-      button.button.is-black.is-rounded.my-3(@click="channelSubscribe") チャンネル登録
+      button.button.is-light.is-rounded.mx-3(v-if="chSubscribe" @click="channelUnSubscribe") 
+        span.icon
+          .fa-solid.fa-user-minus
+        span 登録解除
+      button.button.is-black.is-rounded.mx-3(v-else @click="channelSubscribe") チャンネル登録
+    
+
 
   .tabs.mb-3
     ul
@@ -67,6 +73,9 @@ div(v-if="channelData")
 const channelID = useRoute().params.cid as string;
 
 const { channel: channelData } = await useGetChannelByID(channelID);
+
+const { subscribe: chSubscribe, refresh: chSubscribeReload } =
+  await useGetSubscribeChannel(channelData.value.id);
 const { movies: chMovieList } = await useGetMoviesByChannelID(
   channelData.value.id
 );
@@ -110,17 +119,19 @@ function channelSubscribe() {
     })
     .catch((e) => {
       alert("チャンネル登録失敗しました。");
-    });
+    })
+    .finally(() => chSubscribeReload());
 }
 
-function unChannelSubscribe() {
+function channelUnSubscribe() {
   useUnSubscribeChannel(channelData.value.id)
     .then(() => {
       alert("チャンネル登録解除完了！");
     })
     .catch((e) => {
       alert("チャンネル登録解除に失敗しました。");
-    });
+    })
+    .finally(() => chSubscribeReload());
 }
 
 const isOpenSearchForm = ref(false);
